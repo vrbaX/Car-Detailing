@@ -146,9 +146,9 @@ function App() {
       <section id="faq" className="faq-section motion-section">
         <div className="section-wrap faq-layout">
           <SectionHeading
-            eyebrow="Časté dotazy"
-            title={<>Než se <em>domluvíme.</em></>}
-            text="Pár praktických odpovědí k průběhu, rozsahu a ceně služeb."
+            eyebrow="Informace k péči o vůz"
+            title={<>Co potřebujete <em>vědět.</em></>}
+            text="Odpovědi na otázky ohledně času, ceny a možností úpravy laku."
           />
           <div className="faq-list">
             {faqs.map(([question, answer], index) => (
