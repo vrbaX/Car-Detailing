@@ -38,10 +38,10 @@ const services = [
 ]
 
 const faqs = [
-  ['Jak dlouho detailing trvá?', 'Záleží na velikosti vozu, jeho stavu a zvoleném rozsahu. Přesnější časový odhad dostanete po konzultaci.'],
-  ['Musím se objednat předem?', 'Ano. Práci plánujeme po předchozí domluvě, abychom měli na vůz dostatek času.'],
-  ['Dá se odstranit každý škrábanec?', 'Ne. Některé poškození je příliš hluboké nebo zasahuje pod vrstvu laku. Před leštěním proto posoudíme stav a bezpečné možnosti korekce.'],
-  ['Kolik služba stojí?', 'Cena se odvíjí od rozměrů a stavu vozu i od rozsahu práce. Po upřesnění požadavku připravíme individuální kalkulaci.'],
+  ['Jak dlouho bude auto u vás?', 'Záleží na konkrétní službě, velikosti auta a jeho stavu. Časový odhad vám řekneme předem, až si ujasníme potřebný rozsah práce.'],
+  ['Je potřeba domluvit si termín?', 'Ano. Ozvěte se nám předem a domluvíme termín, který bude vyhovovat oběma stranám. Bez domluvy s příjezdem nepočítejte.'],
+  ['Odstraníte všechny škrábance?', 'Ne vždy. Povrchové vady lze často zmírnit nebo rozleštit, hlubší škrábance ale mohou procházet až skrz vrstvu laku. Před prací posoudíme, co je možné bezpečně upravit.'],
+  ['Kolik bude služba stát?', 'Cena závisí na velikosti auta, jeho aktuálním stavu a požadovaném výsledku. Po konzultaci vám řekneme cenu předem — do práce se pustíme až po jejím odsouhlasení.'],
 ]
 
 function SectionHeading({ eyebrow, title, text, light = false }) {
@@ -146,9 +146,8 @@ function App() {
       <section id="faq" className="faq-section motion-section">
         <div className="section-wrap faq-layout">
           <SectionHeading
-            eyebrow="Informace k péči o vůz"
-            title={<>Co potřebujete <em>vědět.</em></>}
-            text="Odpovědi na otázky ohledně času, ceny a možností úpravy laku."
+            eyebrow="Časté otázky"
+            title={<>Na co se <em>ptáte.</em></>}
           />
           <div className="faq-list">
             {faqs.map(([question, answer], index) => (
