@@ -38,10 +38,10 @@ const services = [
 ]
 
 const faqs = [
-  ['Jak dlouho bude auto u vás?', 'Záleží na konkrétní službě, velikosti auta a jeho stavu. Časový odhad vám řekneme předem, až si ujasníme potřebný rozsah práce.'],
-  ['Je potřeba domluvit si termín?', 'Ano. Ozvěte se nám předem a domluvíme termín, který bude vyhovovat oběma stranám. Bez domluvy s příjezdem nepočítejte.'],
-  ['Odstraníte všechny škrábance?', 'Ne vždy. Povrchové vady lze často zmírnit nebo rozleštit, hlubší škrábance ale mohou procházet až skrz vrstvu laku. Před prací posoudíme, co je možné bezpečně upravit.'],
-  ['Kolik bude služba stát?', 'Cena závisí na velikosti auta, jeho aktuálním stavu a požadovaném výsledku. Po konzultaci vám řekneme cenu předem — do práce se pustíme až po jejím odsouhlasení.'],
+  ['Jak dlouho trvá detailing?', 'Doba práce se liší podle zvolené služby, velikosti vozu a jeho stavu. Přesný čas proto nelze určit obecně. Odhad vám sdělíme po domluvě o rozsahu práce, ještě před předáním vozu.'],
+  ['Je nutné objednat se předem?', 'Ano. Pracujeme na předem domluvené termíny, abychom měli na každý vůz dostatek času. Nejprve nám popište, co potřebujete, a společně domluvíme další postup.'],
+  ['Lze odstranit všechny škrábance?', 'Ne. Leštěním lze upravit především škrábance a vady v čiré vrstvě laku. Pokud poškození zasahuje hlouběji, samotné leštění ho neodstraní. Možnosti korekce vždy závisí na stavu laku.'],
+  ['Kdy se dozvím konečnou cenu?', 'Cenu stanovíme podle velikosti a stavu vozu a podle rozsahu požadované práce. Konkrétní částku vám sdělíme před zahájením; bez vašeho souhlasu žádné práce nezačneme.'],
 ]
 
 function SectionHeading({ eyebrow, title, text, light = false }) {
@@ -146,8 +146,8 @@ function App() {
       <section id="faq" className="faq-section motion-section">
         <div className="section-wrap faq-layout">
           <SectionHeading
-            eyebrow="Časté otázky"
-            title={<>Na co se <em>ptáte.</em></>}
+            eyebrow="Časté dotazy"
+            title={<>Před návštěvou <em>detailingu.</em></>}
           />
           <div className="faq-list">
             {faqs.map(([question, answer], index) => (
