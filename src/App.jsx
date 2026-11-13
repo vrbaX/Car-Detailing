@@ -82,7 +82,7 @@ function App() {
   }
 
   return (
-    <main className="min-h-screen overflow-hidden bg-[#151719] text-[#F0EEE8]">
+    <main className="min-h-screen bg-[#151719] text-[#F0EEE8]">
       <Navbar />
       <Hero />
 
