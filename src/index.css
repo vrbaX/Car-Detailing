@@ -821,3 +821,27 @@ main.min-h-screen::before {
   .decision-item + .decision-item { border-top: 1px solid rgba(240,238,232,.13); }
   .decision-item h3 { margin-top: 14px; }
 }
+
+
+/* Compact, accessible navigation for touch screens */
+.mobile-nav { display: none; position: relative; color: var(--pearl); }
+.mobile-nav summary { display: flex; align-items: center; gap: 6px; cursor: pointer; list-style: none; font-size: 11px; font-weight: 700; }
+.mobile-nav summary::-webkit-details-marker { display: none; }
+.mobile-nav-panel {
+  position: absolute;
+  top: calc(100% + 22px);
+  right: -8px;
+  z-index: 80;
+  display: grid;
+  min-width: 180px;
+  padding: 9px 16px;
+  border: 1px solid rgba(240,238,232,.14);
+  background: rgba(17,19,21,.98);
+  box-shadow: 0 16px 40px rgba(0,0,0,.35);
+}
+.mobile-nav-panel a { padding: 13px 2px; color: rgba(240,238,232,.82); font-size: 12px; border-bottom: 1px solid rgba(240,238,232,.08); }
+.mobile-nav-panel a:last-child { border-bottom: 0; }
+@media (max-width: 700px) {
+  .mobile-nav { display: block; margin-left: auto; margin-right: 15px; }
+  .desktop-nav-links { display: none; }
+}
