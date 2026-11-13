@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react'
 import {
-  ArrowDownRight, ArrowUpRight, ChevronDown,
+  ArrowUpRight, ChevronDown,
   CircleDot, Clock3, Droplets, Gauge, ShieldCheck, Sparkles,
 } from 'lucide-react'
 import Navbar from './components/Navbar'
@@ -35,13 +35,6 @@ const services = [
     description: 'Ochranné přípravky a keramické povlaky pro snazší údržbu a dlouhodobější ochranu povrchu.',
     tags: ['Keramická ochrana', 'Vosk', 'Údržba'],
   },
-]
-
-const steps = [
-  ['01', 'Ozvete se', 'Napište, co s vozem potřebujete vyřešit. Pomůže i několik fotografií.'],
-  ['02', 'Probereme stav vozu', 'Ujasníme si očekávání, rozsah práce a vhodný postup.'],
-  ['03', 'Navrhneme řešení', 'Dostanete konkrétní doporučení a cenový odhad před zahájením práce.'],
-  ['04', 'Předání vozu', 'Po dokončení si společně projdeme výsledek a doporučíme další péči.'],
 ]
 
 const faqs = [
@@ -147,28 +140,6 @@ function App() {
           </div>
           <p className="pricing-note">Konečnou cenu potvrdíme po upřesnění modelu, velikosti a aktuálního stavu vozu — vždy před zahájením práce.</p>
           <a href="#kontakt" className="button-primary pricing-cta">Nechat si spočítat cenu <ArrowUpRight size={15} /></a>
-        </div>
-      </section>
-
-      <section id="postup" className="process-section motion-section">
-        <div className="section-wrap process-layout">
-          <div className="process-intro">
-            <SectionHeading
-              eyebrow="Jak spolupráce probíhá"
-              title={<>Nejdřív plán.<br /><em>Potom práce.</em></>}
-              text="Bez překvapení v rozsahu nebo ceně. Nejdřív si řekneme, co dává smysl a co od výsledku čekat."
-            />
-            <a href="#kontakt" className="button-primary">Domluvit konzultaci <ArrowUpRight size={16} /></a>
-          </div>
-          <div className="steps-list">
-            {steps.map(([number, title, description]) => (
-              <article className="step-row reveal" key={number}>
-                <span className="step-number">{number}</span>
-                <div><h3>{title}</h3><p>{description}</p></div>
-                <ArrowDownRight className="step-arrow" size={19} />
-              </article>
-            ))}
-          </div>
         </div>
       </section>
 
