@@ -93,7 +93,7 @@ function App() {
       <Navbar />
       <Hero />
 
-      <section className="trust-strip motion-section" aria-label="Přístup k práci">
+      <section className="trust-strip motion-section" aria-label="Přehled služeb">
         <div><span>01</span><p>Čištění interiéru</p></div>
         <div><span>02</span><p>Péče o exteriér</p></div>
         <div><span>03</span><p>Korekce a ochrana laku</p></div>
