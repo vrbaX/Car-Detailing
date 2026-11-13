@@ -845,3 +845,67 @@ main.min-h-screen::before {
   .mobile-nav { display: block; margin-left: auto; margin-right: 15px; }
   .desktop-nav-links { display: none; }
 }
+
+
+/* Hero: visual on the left, clear offer and actions on the right */
+.hero-section {
+  position: relative;
+  display: grid;
+  grid-template-columns: minmax(0, 1.08fr) minmax(0, .92fr);
+  min-height: min(820px, 100svh);
+  padding-top: 82px;
+  overflow: hidden;
+  background: #111315;
+}
+.hero-photo { position: relative; min-height: 690px; overflow: hidden; background: #1b1f22; }
+.hero-photo::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(90deg, rgba(10,12,13,.06) 45%, #111315 100%), linear-gradient(0deg, rgba(10,12,13,.48), transparent 38%);
+}
+.hero-photo img { width: 100%; height: 100%; min-height: 690px; display: block; object-fit: cover; object-position: 48% center; filter: brightness(.82) saturate(.78); }
+.hero-photo-caption { position: absolute; z-index: 2; left: 28px; bottom: 26px; color: rgba(240,238,232,.62); font-size: 9px; letter-spacing: .08em; text-transform: uppercase; }
+.hero-backdrop { position: absolute; inset: 0 0 0 48%; pointer-events: none; background: radial-gradient(ellipse at 82% 50%, rgba(212,0,0,.09), transparent 30rem), linear-gradient(110deg, #111315, #171a1d); }
+.hero-content { position: relative; z-index: 2; display: flex; align-items: center; padding: 60px clamp(32px,5vw,86px) 76px clamp(30px,4vw,70px); }
+.hero-copy { width: min(100%, 680px); }
+.hero-copy h1 { margin: 0; color: #F0EEE8; font-size: clamp(40px,4.1vw,66px); font-weight: 800; line-height: 1.07; letter-spacing: -.065em; }
+.hero-copy > p { max-width: 520px; margin: 25px 0 0; color: rgba(240,238,232,.7); font-size: 15px; line-height: 1.9; }
+.hero-actions { display: flex; flex-wrap: wrap; gap: 12px; margin-top: 34px; }
+.hero-scroll { display: inline-flex; align-items: center; gap: 10px; margin-top: 56px; color: rgba(240,238,232,.52); font-size: 9px; font-weight: 800; letter-spacing: .16em; text-transform: uppercase; }
+.hero-scroll svg { color: var(--rosso); }
+.pricing-section { padding: 125px 0; background: #121517; }
+.pricing-list { border-top: 1px solid rgba(240,238,232,.18); }
+.price-row { display: grid; grid-template-columns: minmax(0,1fr) auto; align-items: center; gap: 35px; padding: 27px 4px; border-bottom: 1px solid rgba(240,238,232,.15); }
+.price-row > div > span { color: var(--rosso); font-size: 10px; font-weight: 800; letter-spacing: .14em; }
+.price-row h3 { margin: 9px 0 6px; color: var(--pearl); font-size: clamp(19px,2.2vw,26px); letter-spacing: -.045em; }
+.price-row p { margin: 0; color: #aeb3b5; font-size: 13px; line-height: 1.7; }
+.price-row > strong { color: var(--pearl); font-size: clamp(20px,2.3vw,28px); white-space: nowrap; letter-spacing: -.04em; }
+.pricing-note { max-width: 760px; margin: 22px 0 0; color: #9ca2a4; font-size: 12px; line-height: 1.8; }
+.pricing-cta { margin-top: 26px; }
+#cena { scroll-margin-top: 105px; }
+@media (max-width: 900px) {
+  .hero-section { grid-template-columns: minmax(0,.9fr) minmax(0,1.1fr); }
+  .hero-photo, .hero-photo img { min-height: 620px; }
+  .hero-content { padding-inline: 28px; }
+  .hero-copy h1 { font-size: clamp(36px,5vw,54px); }
+}
+@media (max-width: 700px) {
+  .hero-section { display: flex; flex-direction: column; min-height: 0; padding-top: 70px; }
+  .hero-photo { min-height: 290px; height: 38svh; max-height: 390px; }
+  .hero-photo img { min-height: 0; height: 100%; object-position: center 42%; }
+  .hero-photo::after { background: linear-gradient(0deg, #111315 0%, transparent 42%); }
+  .hero-photo-caption { left: 18px; bottom: 15px; font-size: 8px; }
+  .hero-backdrop { inset: 38% 0 0; }
+  .hero-content { padding: 30px 22px 54px; }
+  .hero-copy h1 { font-size: clamp(37px,10vw,50px); }
+  .hero-copy > p { margin-top: 18px; font-size: 13px; }
+  .hero-actions { margin-top: 25px; }
+  .hero-scroll { margin-top: 28px; }
+  .pricing-section { padding: 82px 0; }
+  .price-row { grid-template-columns: 1fr; gap: 12px; padding: 22px 0; }
+  .price-row > strong { font-size: 23px; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .hero-photo img { transition: none !important; }
+}
