@@ -1,4 +1,3 @@
-import { useEffect, useState } from 'react'
 import { ArrowUpRight, ChevronDown } from 'lucide-react'
 
 const navigation = [
@@ -8,36 +7,8 @@ const navigation = [
 ]
 
 export default function Navbar() {
-  const [visible, setVisible] = useState(true)
-
-  useEffect(() => {
-    let previousY = window.scrollY
-    let ticking = false
-
-    const updateVisibility = () => {
-      const currentY = window.scrollY
-      const difference = currentY - previousY
-
-      if (currentY < 90 || difference < -5) setVisible(true)
-      else if (difference > 7 && currentY > 150) setVisible(false)
-
-      previousY = currentY
-      ticking = false
-    }
-
-    const handleScroll = () => {
-      if (!ticking) {
-        window.requestAnimationFrame(updateVisibility)
-        ticking = true
-      }
-    }
-
-    window.addEventListener('scroll', handleScroll, { passive: true })
-    return () => window.removeEventListener('scroll', handleScroll)
-  }, [])
-
   return (
-    <header className={`site-header ${visible ? 'is-visible' : 'is-hidden'}`}>
+    <header className="site-header">
       <nav className="mx-auto flex h-[82px] max-w-[1440px] items-center justify-between px-12 max-[700px]:h-[70px] max-[700px]:px-5" aria-label="Hlavní navigace">
         <a href="#top" aria-label="VRB DETAILING — úvodní stránka" className="flex items-center gap-3">
           <span className="text-[31px] font-extrabold tracking-[-0.09em]">VRB<span className="text-[#D40000]">.</span></span>
