@@ -13,7 +13,7 @@ export default function Hero() {
         preload="metadata"
         poster="https://images.pexels.com/photos/14615262/pexels-photo-14615262.jpeg?auto=compress&cs=tinysrgb&w=1800"
       >
-        <source src="https://videos.pexels.com/video-files/6159183/6159183-hd_1920_1080_30fps.mp4" type="video/mp4" />
+        <source src="https://videos.pexels.com/video-files/4822920/4822920-uhd_3840_2160_25fps.mp4" type="video/mp4" />
       </video>
       <div aria-hidden="true" className="hero-backdrop" />
       <div aria-hidden="true" className="hero-mark">VRB<span>.</span></div>
@@ -36,7 +36,7 @@ export default function Hero() {
           <a href="#sluzby" className="hero-scroll">Prohlédnout nabídku <ArrowDown size={14} /></a>
         </div>
       </div>
-      <span className="hero-image-credit">Video: Pavel Danilyuk / Pexels · Foto: Dextar Studio / Pexels</span>
+      <span className="hero-image-credit">Video: Gustavo Fring / Pexels · Foto: Dextar Studio / Pexels</span>
     </section>
   )
 }
