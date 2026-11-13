@@ -119,7 +119,7 @@ button, a { -webkit-tap-highlight-color: transparent; }
 .footer-top svg { color:var(--rosso); }
 .copyright { grid-column:1/-1; padding-top:20px; border-top:1px solid var(--line); color:#666d70; font-size:9px; }
 .reveal { animation:fade-up .75s both; }
-@keyframes fade-up { from { opacity:0; transform:translateY(18px); } to { opacity:1; transform:translateY(0); } }
+@keyframes reveal-up { from { opacity:0; transform:translateY(18px); } to { opacity:1; transform:translateY(0); } }
 @media (prefers-reduced-motion:no-preference) {
   .service-card, .work-image img, .button-primary, .button-secondary, .button-nav { will-change:transform; }
 }
@@ -159,3 +159,11 @@ button, a { -webkit-tap-highlight-color: transparent; }
 @media (prefers-reduced-motion:reduce) {
   *,*::before,*::after { scroll-behavior:auto!important; animation-duration:.01ms!important; animation-iteration-count:1!important; transition-duration:.01ms!important; }
 }
+
+.animate-fade-up { animation: fade-up .8s cubic-bezier(.2,.7,.2,1) both; }
+.delay-1 { animation-delay: 120ms; }
+.delay-2 { animation-delay: 240ms; }
+.delay-3 { animation-delay: 360ms; }
+.scroll-indicator { animation: scroll-pulse 2s ease-in-out infinite; }
+@keyframes fade-up { from { opacity:0; transform:translateY(18px); } to { opacity:1; transform:translateY(0); } }
+@keyframes scroll-pulse { 0%,100% { transform:translateY(0); opacity:.55; } 50% { transform:translateY(5px); opacity:1; } }
