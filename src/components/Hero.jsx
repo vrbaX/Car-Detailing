@@ -3,15 +3,8 @@ import { ArrowDown, ArrowRight } from 'lucide-react'
 export default function Hero() {
   return (
     <section id="top" className="hero-section">
-      <div className="hero-photo">
-        <img
-          src="https://images.pexels.com/photos/14615262/pexels-photo-14615262.jpeg?auto=compress&cs=tinysrgb&w=2400"
-          alt="Detailní leštění laku automobilu v dílně"
-          fetchPriority="high"
-        />
-        <span className="hero-photo-caption">Ilustrační fotografie · Dextar Studio / Pexels</span>
-      </div>
       <div aria-hidden="true" className="hero-backdrop" />
+      <div aria-hidden="true" className="hero-mark">VRB<span>.</span></div>
       <div className="hero-content">
         <div className="hero-copy">
           <div className="animate-fade-up mb-8 flex items-center gap-3 max-[700px]:mb-6">
