@@ -26,6 +26,7 @@ npm run build
 
 ## Notes
 
-- The hero photograph is a temporary Unsplash image. Replace it with an original, licensed project photograph before publishing.
-- Navigation links point to sections that will be added in subsequent development steps.
-- No real customer reviews, business credentials, or service claims have been fabricated.
+- The interface currently uses CSS-generated backgrounds and no externally hosted stock photographs.
+- The mobile navigation links to services, pricing factors, process, and FAQs.
+- The contact form is intentionally disabled until a real submission endpoint and privacy information are configured.
+- No customer reviews, credentials, exact prices, or verified business contact details have been invented.
