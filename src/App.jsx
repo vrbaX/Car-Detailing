@@ -155,7 +155,7 @@ function App() {
         </div>
       </section>
 
-      <section className="process-section motion-section">
+      <section id="postup" className="process-section motion-section">
         <div className="section-wrap process-layout">
           <div className="process-intro">
             <SectionHeading
@@ -177,7 +177,7 @@ function App() {
         </div>
       </section>
 
-      <section className="faq-section motion-section">
+      <section id="faq" className="faq-section motion-section">
         <div className="section-wrap faq-layout">
           <SectionHeading
             eyebrow="Časté dotazy"
