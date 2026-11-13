@@ -66,7 +66,7 @@ function App() {
   const [formMessage, setFormMessage] = useState('')
 
   useEffect(() => {
-    const elements = document.querySelectorAll('.reveal')
+    const elements = document.querySelectorAll('.reveal, .motion-section')
     if (!('IntersectionObserver' in window)) {
       elements.forEach(element => element.classList.add('is-visible'))
       return
@@ -93,14 +93,14 @@ function App() {
       <Navbar />
       <Hero />
 
-      <section className="trust-strip" aria-label="Přístup k práci">
+      <section className="trust-strip motion-section" aria-label="Přístup k práci">
         <div><span>01</span><p>Individuální posouzení vozu</p></div>
         <div><span>02</span><p>Rozsah práce po domluvě</p></div>
         <div><span>03</span><p>Cena před zahájením</p></div>
         <div><span>04</span><p>Stříbro a okolí</p></div>
       </section>
 
-      <section id="sluzby" className="section-wrap services-section">
+      <section id="sluzby" className="section-wrap services-section motion-section">
         <SectionHeading
           eyebrow="Co pro váš vůz můžeme udělat"
           title={<>Péče podle stavu.<br /><em>Ne podle šablony.</em></>}
@@ -127,7 +127,7 @@ function App() {
         </div>
       </section>
 
-      <section id="realizace" className="work-section">
+      <section id="realizace" className="work-section motion-section">
         <div className="section-wrap">
           <SectionHeading
             eyebrow="Práce na vozech"
@@ -152,7 +152,7 @@ function App() {
         </div>
       </section>
 
-      <section className="process-section">
+      <section className="process-section motion-section">
         <div className="section-wrap process-layout">
           <div className="process-intro">
             <SectionHeading
@@ -174,7 +174,7 @@ function App() {
         </div>
       </section>
 
-      <section id="o-nas" className="about-section">
+      <section id="o-nas" className="about-section motion-section">
         <div className="about-photo">
           <img src="https://images.unsplash.com/photo-1486262715619-67b85e0b08d3?auto=format&fit=crop&w=1400&q=85" alt="Práce na detailu automobilu" loading="lazy" onError={(event) => { event.currentTarget.onerror = null; event.currentTarget.src = "https://images.unsplash.com/photo-1503376780353-7e6692767b70?auto=format&fit=crop&w=1400&q=85" }} />
           <div className="photo-stamp"><span>VRB.</span><small>DETAILING / STŘÍBRO</small></div>
@@ -188,7 +188,7 @@ function App() {
         </div>
       </section>
 
-      <section className="faq-section">
+      <section className="faq-section motion-section">
         <div className="section-wrap faq-layout">
           <SectionHeading
             eyebrow="Časté dotazy"
@@ -208,7 +208,7 @@ function App() {
         </div>
       </section>
 
-      <section id="kontakt" className="contact-section">
+      <section id="kontakt" className="contact-section motion-section">
         <div className="section-wrap contact-layout">
           <div className="contact-copy reveal">
             <span className="eyebrow"><i />Konzultace</span>
@@ -236,7 +236,7 @@ function App() {
         </div>
       </section>
 
-      <footer className="site-footer">
+      <footer className="site-footer motion-section">
         <a href="#" className="footer-brand">VRB<span>.</span><small>DETAILING</small></a>
         <p>Detailing a ochrana automobilů / Stříbro</p>
         <a href="#top" className="footer-top">Zpět nahoru <ArrowUpRight size={14} /></a>
