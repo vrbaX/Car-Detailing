@@ -24,6 +24,7 @@ export default function Hero() {
           <a href="#sluzby" className="hero-scroll">Prohlédnout nabídku <ArrowDown size={14} /></a>
         </div>
       </div>
+      <span className="hero-image-credit">Ilustrační fotografie: Dextar Studio / Pexels</span>
     </section>
   )
 }
