@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react'
 import {
-  ArrowDownRight, ArrowRight, ArrowUpRight, Check, ChevronDown,
+  ArrowDownRight, ArrowUpRight, ChevronDown,
   CircleDot, Clock3, Droplets, Gauge, ShieldCheck, Sparkles,
 } from 'lucide-react'
 import Navbar from './components/Navbar'
