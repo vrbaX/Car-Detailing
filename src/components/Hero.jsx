@@ -3,18 +3,13 @@ import { ArrowDown, ArrowRight } from 'lucide-react'
 export default function Hero() {
   return (
     <section id="top" className="hero-section">
-      <video
-        className="hero-video"
+      <img
+        className="hero-still"
+        src="https://images.pexels.com/photos/36548466/pexels-photo-36548466.jpeg?auto=compress&cs=tinysrgb&w=3840"
+        alt=""
         aria-hidden="true"
-        autoPlay
-        muted
-        loop
-        playsInline
-        preload="metadata"
-        poster="https://images.pexels.com/photos/14615262/pexels-photo-14615262.jpeg?auto=compress&cs=tinysrgb&w=1800"
-      >
-        <source src="https://videos.pexels.com/video-files/4822920/4822920-uhd_3840_2160_25fps.mp4" type="video/mp4" />
-      </video>
+        fetchPriority="high"
+      />
       <div aria-hidden="true" className="hero-backdrop" />
       <div aria-hidden="true" className="hero-mark">VRB<span>.</span></div>
       <div className="hero-content">
@@ -36,7 +31,7 @@ export default function Hero() {
           <a href="#sluzby" className="hero-scroll">Prohlédnout nabídku <ArrowDown size={14} /></a>
         </div>
       </div>
-      <span className="hero-image-credit">Video: Gustavo Fring / Pexels · Foto: Dextar Studio / Pexels</span>
+      <span className="hero-image-credit">Foto: Patrick Dziggel / Pexels</span>
     </section>
   )
 }
