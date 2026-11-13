@@ -93,13 +93,6 @@ function App() {
       <Navbar />
       <Hero />
 
-      <section className="trust-strip motion-section" aria-label="Přehled služeb">
-        <div><span>01</span><p>Čištění interiéru</p></div>
-        <div><span>02</span><p>Péče o exteriér</p></div>
-        <div><span>03</span><p>Korekce a ochrana laku</p></div>
-        <div><span>04</span><p>Stříbro a okolí</p></div>
-      </section>
-
       <section id="sluzby" className="section-wrap services-section motion-section">
         <SectionHeading
           eyebrow="Co pro váš vůz můžeme udělat"
@@ -127,31 +120,33 @@ function App() {
         </div>
       </section>
 
-      <section id="cena" className="decision-section motion-section">
+      <section id="cena" className="pricing-section motion-section">
         <div className="section-wrap">
           <SectionHeading
-            eyebrow="Cena a rozsah práce"
-            title={<>Co rozhoduje o <em>ceně?</em></>}
-            text="Stejná služba může u dvou aut znamenat úplně jinou práci. Předběžný odhad proto stavíme na konkrétním voze, ne na univerzálním ceníku."
+            eyebrow="Orientační ceník"
+            title={<>Kolik stojí péče<br /><em>o váš vůz?</em></>}
+            text="Ukázkové ceny pro běžný osobní automobil. Větší vozy, silnější znečištění a rozsáhlejší korekce mohou cenu navýšit."
           />
-          <div className="decision-grid">
-            <article className="decision-item reveal">
-              <span>01</span>
-              <h3>Velikost a typ vozu</h3>
-              <p>Rozměry auta a členitost interiéru nebo karoserie ovlivňují čas potřebný na práci.</p>
+          <div className="pricing-list">
+            <article className="price-row reveal">
+              <div><span>01 / INTERIÉR</span><h3>Hloubkové čištění interiéru</h3><p>Vysátí, čištění plastů a textilu, tepování podle materiálů a stavu.</p></div>
+              <strong>od 2 500 Kč</strong>
             </article>
-            <article className="decision-item reveal">
-              <span>02</span>
-              <h3>Aktuální stav</h3>
-              <p>Míra znečištění, stav materiálů a poškození laku určují, co je potřeba řešit.</p>
+            <article className="price-row reveal">
+              <div><span>02 / EXTERIÉR</span><h3>Mytí a dekontaminace laku</h3><p>Šetrné ruční mytí, odstranění nečistot a základní ochrana povrchu.</p></div>
+              <strong>od 1 500 Kč</strong>
             </article>
-            <article className="decision-item reveal">
-              <span>03</span>
-              <h3>Požadovaný výsledek</h3>
-              <p>Rozsah čištění, korekce nebo ochrany volíme podle toho, co od péče očekáváte.</p>
+            <article className="price-row reveal">
+              <div><span>03 / KOREKCE</span><h3>Jednokrokové leštění laku</h3><p>Oživení lesku a omezení lehkých defektů podle stavu a tvrdosti laku.</p></div>
+              <strong>od 5 000 Kč</strong>
+            </article>
+            <article className="price-row reveal">
+              <div><span>04 / OCHRANA</span><h3>Keramická ochrana laku</h3><p>Aplikace ochranné vrstvy po odpovídající přípravě povrchu.</p></div>
+              <strong>od 7 000 Kč</strong>
             </article>
           </div>
-          <a href="#kontakt" className="button-secondary decision-cta">Požádat o předběžný odhad <ArrowUpRight size={15} /></a>
+          <p className="pricing-note">Konečnou cenu potvrdíme po upřesnění modelu, velikosti a aktuálního stavu vozu — vždy před zahájením práce.</p>
+          <a href="#kontakt" className="button-primary pricing-cta">Nechat si spočítat cenu <ArrowUpRight size={15} /></a>
         </div>
       </section>
 
