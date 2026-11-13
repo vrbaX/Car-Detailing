@@ -3,46 +3,30 @@ import { ArrowUpRight } from 'lucide-react'
 const navigation = [
   { label: 'Služby', href: '#sluzby' },
   { label: 'Realizace', href: '#realizace' },
-  { label: 'O nás', href: '#o-nas' },
+  { label: 'Přístup', href: '#o-nas' },
   { label: 'Kontakt', href: '#kontakt' },
 ]
 
 export default function Navbar() {
   return (
-    <header className="absolute left-0 top-0 z-50 w-full border-b border-white/[0.08] bg-[#151719]/70 backdrop-blur-xl">
-      <nav className="mx-auto flex h-[86px] max-w-[1600px] items-center justify-between px-12 max-[700px]:h-[72px] max-[700px]:px-5">
+    <header className="absolute left-0 top-0 z-50 w-full border-b border-white/[0.08] bg-[#111315]/65 backdrop-blur-xl">
+      <nav className="mx-auto flex h-[82px] max-w-[1440px] items-center justify-between px-12 max-[700px]:h-[70px] max-[700px]:px-5">
         <a href="#" aria-label="VRB DETAILING — úvodní stránka" className="flex items-center gap-3">
-          <span className="text-[31px] font-extrabold tracking-[-0.09em]">
-            VRB<span className="text-[#D40000]">.</span>
-          </span>
-
+          <span className="text-[31px] font-extrabold tracking-[-0.09em]">VRB<span className="text-[#D40000]">.</span></span>
           <span className="h-7 w-px bg-white/20" />
-
-          <span className="text-[10px] font-bold tracking-[0.24em] text-white/65">
-            DETAILING
-          </span>
+          <span className="text-[9px] font-bold tracking-[0.24em] text-white/65">DETAILING</span>
         </a>
-
         <div className="desktop-nav-links flex items-center gap-9">
-          {navigation.map((item) => (
-            <a
-              key={item.label}
-              href={item.href}
-              className="group relative py-2 text-[11px] font-bold tracking-[0.08em] text-white/65 transition-colors duration-200 hover:text-white"
-            >
+          {navigation.map(item => (
+            <a key={item.label} href={item.href} className="group relative py-2 text-[10px] font-bold tracking-[0.08em] text-white/65 transition-colors duration-200 hover:text-white">
               {item.label}
               <span className="absolute bottom-0 left-0 h-px w-0 bg-[#D40000] transition-all duration-300 group-hover:w-full" />
             </a>
           ))}
         </div>
-
         <a href="#kontakt" className="button-nav group">
           <span>Domluvit konzultaci</span>
-          <ArrowUpRight
-            size={14}
-            aria-hidden="true"
-            className="transition-transform duration-200 group-hover:-translate-y-0.5 group-hover:translate-x-0.5"
-          />
+          <ArrowUpRight size={14} aria-hidden="true" className="transition-transform duration-200 group-hover:-translate-y-0.5 group-hover:translate-x-0.5" />
         </a>
       </nav>
     </header>
