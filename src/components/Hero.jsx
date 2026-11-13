@@ -3,7 +3,7 @@ import { ArrowDown, ArrowRight } from 'lucide-react'
 export default function Hero() {
   return (
     <section id="top" className="relative flex min-h-[760px] h-[100svh] items-center overflow-hidden bg-[#111315] max-[700px]:min-h-[720px]">
-      <div aria-hidden="true" className="absolute inset-0 bg-cover bg-[center_58%]" style={{ backgroundImage: "url('https://images.unsplash.com/photo-1503376780353-7e6692767b70?auto=format&fit=crop&w=2400&q=85')" }} />
+      <div aria-hidden="true" className="hero-backdrop absolute inset-0" />
       <div aria-hidden="true" className="absolute inset-0 bg-[#090b0d]/50" />
       <div aria-hidden="true" className="absolute inset-0 bg-gradient-to-r from-[#111315] via-[#111315]/80 to-[#111315]/10" />
       <div aria-hidden="true" className="absolute inset-0 bg-gradient-to-t from-[#111315] via-transparent to-[#111315]/35" />
@@ -11,7 +11,7 @@ export default function Hero() {
         <div className="max-w-[780px]">
           <div className="animate-fade-up mb-8 flex items-center gap-3 max-[700px]:mb-6">
             <span className="h-px w-10 bg-[#D40000]" />
-            <span className="text-[10px] font-bold uppercase tracking-[0.25em] text-white/75">Automobilový detailing / Stříbro</span>
+            <span className="text-[10px] font-bold uppercase tracking-[0.25em] text-white/75">Detailing automobilů / Stříbro</span>
           </div>
           <h1 className="animate-fade-up delay-1 text-[clamp(42px,5.1vw,76px)] font-extrabold leading-[1.08] tracking-[-0.065em] text-[#F0EEE8]">
             Detailing a ochrana<br />automobilů ve Stříbře.
