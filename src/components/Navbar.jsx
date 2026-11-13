@@ -3,7 +3,6 @@ import { ArrowUpRight, ChevronDown } from 'lucide-react'
 const navigation = [
   { label: 'Služby', href: '#sluzby' },
   { label: 'Odhad ceny', href: '#cena' },
-  { label: 'Postup', href: '#postup' },
   { label: 'FAQ', href: '#faq' },
 ]
 
