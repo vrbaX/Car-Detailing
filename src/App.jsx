@@ -110,15 +110,15 @@ function App() {
           />
           <div className="work-grid">
             <div className="work-image work-image-main reveal">
-              <img src="https://images.unsplash.com/photo-1600705722907-3a7e7a1c1f4d?auto=format&fit=crop&w=1400&q=85" alt="Detail karoserie automobilu" loading="lazy" />
+              <img src="https://images.unsplash.com/photo-1503376780353-7e6692767b70?auto=format&fit=crop&w=1400&q=85" alt="Sportovní automobil s lesklým lakem" loading="lazy" onError={(event) => { event.currentTarget.onerror = null; event.currentTarget.src = "https://images.unsplash.com/photo-1503376780353-7e6692767b70?auto=format&fit=crop&w=1400&q=85" }} />
               <span className="image-caption">Povrch a lak <b>01</b></span>
             </div>
             <div className="work-image reveal">
-              <img src="https://images.unsplash.com/photo-1507136566006-cfc505b114fc?auto=format&fit=crop&w=1000&q=85" alt="Detail interiéru automobilu" loading="lazy" />
+              <img src="https://images.unsplash.com/photo-1507136566006-cfc505b114fc?auto=format&fit=crop&w=1000&q=85" alt="Detail interiéru automobilu" loading="lazy" onError={(event) => { event.currentTarget.onerror = null; event.currentTarget.src = "https://images.unsplash.com/photo-1503376780353-7e6692767b70?auto=format&fit=crop&w=1000&q=85" }} />
               <span className="image-caption">Interiér <b>02</b></span>
             </div>
             <div className="work-image reveal">
-              <img src="https://images.unsplash.com/photo-1603386329225-868f9b1ee6c9?auto=format&fit=crop&w=1000&q=85" alt="Čistý automobil po péči" loading="lazy" />
+              <img src="https://images.unsplash.com/photo-1603386329225-868f9b1ee6c9?auto=format&fit=crop&w=1000&q=85" alt="Čistý automobil po péči" loading="lazy" onError={(event) => { event.currentTarget.onerror = null; event.currentTarget.src = "https://images.unsplash.com/photo-1503376780353-7e6692767b70?auto=format&fit=crop&w=1000&q=85" }} />
               <span className="image-caption">Péče o exteriér <b>03</b></span>
             </div>
           </div>
@@ -150,7 +150,7 @@ function App() {
 
       <section id="o-nas" className="about-section">
         <div className="about-photo">
-          <img src="https://images.unsplash.com/photo-1486262715619-67b85e0b08d3?auto=format&fit=crop&w=1400&q=85" alt="Práce na detailu automobilu" loading="lazy" />
+          <img src="https://images.unsplash.com/photo-1486262715619-67b85e0b08d3?auto=format&fit=crop&w=1400&q=85" alt="Práce na detailu automobilu" loading="lazy" onError={(event) => { event.currentTarget.onerror = null; event.currentTarget.src = "https://images.unsplash.com/photo-1503376780353-7e6692767b70?auto=format&fit=crop&w=1400&q=85" }} />
           <div className="photo-stamp"><span>VRB.</span><small>DETAILING / STŘÍBRO</small></div>
         </div>
         <div className="about-copy reveal">
