@@ -5,7 +5,7 @@ export default function Hero() {
     <section id="top" className="hero-section">
       <div className="hero-photo">
         <img
-          src="https://images.pexels.com/photos/14615262/pexels-photo-14615262.jpeg?auto=compress&cs=tinysrgb&w=1800"
+          src="https://images.pexels.com/photos/14615262/pexels-photo-14615262.jpeg?auto=compress&cs=tinysrgb&w=2400"
           alt="Detailní leštění laku automobilu v dílně"
           fetchPriority="high"
         />
