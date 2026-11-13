@@ -85,7 +85,7 @@ function App() {
 
   function handleSubmit(event) {
     event.preventDefault()
-    setFormMessage('Formulář je zatím pouze návrh. Před spuštěním je potřeba připojit odesílání poptávek.')
+    setFormMessage('Odesílání poptávek zatím není nastavené.')
   }
 
   return (
@@ -94,9 +94,9 @@ function App() {
       <Hero />
 
       <section className="trust-strip motion-section" aria-label="Přístup k práci">
-        <div><span>01</span><p>Individuální posouzení vozu</p></div>
-        <div><span>02</span><p>Rozsah práce po domluvě</p></div>
-        <div><span>03</span><p>Cena před zahájením</p></div>
+        <div><span>01</span><p>Čištění interiéru</p></div>
+        <div><span>02</span><p>Péče o exteriér</p></div>
+        <div><span>03</span><p>Korekce a ochrana laku</p></div>
         <div><span>04</span><p>Stříbro a okolí</p></div>
       </section>
 
@@ -127,28 +127,31 @@ function App() {
         </div>
       </section>
 
-      <section id="realizace" className="work-section motion-section">
+      <section id="cena" className="decision-section motion-section">
         <div className="section-wrap">
           <SectionHeading
-            eyebrow="Práce na vozech"
-            title={<>Rozhodují <em>detaily.</em></>}
-            text="Výsledek má být vidět na povrchu, v interiéru i v tom, jak snadno se o vůz dál stará."
+            eyebrow="Cena a rozsah práce"
+            title={<>Co rozhoduje o <em>ceně?</em></>}
+            text="Stejná služba může u dvou aut znamenat úplně jinou práci. Předběžný odhad proto stavíme na konkrétním voze, ne na univerzálním ceníku."
           />
-          <div className="work-grid">
-            <div className="work-image work-image-main reveal">
-              <img src="https://images.unsplash.com/photo-1503376780353-7e6692767b70?auto=format&fit=crop&w=1400&q=85" alt="Sportovní automobil s lesklým lakem" loading="lazy" onError={(event) => { event.currentTarget.onerror = null; event.currentTarget.src = "https://images.unsplash.com/photo-1503376780353-7e6692767b70?auto=format&fit=crop&w=1400&q=85" }} />
-              <span className="image-caption">Povrch a lak <b>01</b></span>
-            </div>
-            <div className="work-image reveal">
-              <img src="https://images.unsplash.com/photo-1507136566006-cfc505b114fc?auto=format&fit=crop&w=1000&q=85" alt="Detail interiéru automobilu" loading="lazy" onError={(event) => { event.currentTarget.onerror = null; event.currentTarget.src = "https://images.unsplash.com/photo-1503376780353-7e6692767b70?auto=format&fit=crop&w=1000&q=85" }} />
-              <span className="image-caption">Interiér <b>02</b></span>
-            </div>
-            <div className="work-image reveal">
-              <img src="https://images.unsplash.com/photo-1603386329225-868f9b1ee6c9?auto=format&fit=crop&w=1000&q=85" alt="Čistý automobil po péči" loading="lazy" onError={(event) => { event.currentTarget.onerror = null; event.currentTarget.src = "https://images.unsplash.com/photo-1503376780353-7e6692767b70?auto=format&fit=crop&w=1000&q=85" }} />
-              <span className="image-caption">Péče o exteriér <b>03</b></span>
-            </div>
+          <div className="decision-grid">
+            <article className="decision-item reveal">
+              <span>01</span>
+              <h3>Velikost a typ vozu</h3>
+              <p>Rozměry auta a členitost interiéru nebo karoserie ovlivňují čas potřebný na práci.</p>
+            </article>
+            <article className="decision-item reveal">
+              <span>02</span>
+              <h3>Aktuální stav</h3>
+              <p>Míra znečištění, stav materiálů a poškození laku určují, co je potřeba řešit.</p>
+            </article>
+            <article className="decision-item reveal">
+              <span>03</span>
+              <h3>Požadovaný výsledek</h3>
+              <p>Rozsah čištění, korekce nebo ochrany volíme podle toho, co od péče očekáváte.</p>
+            </article>
           </div>
-          <p className="gallery-note">Ukázkové fotografie. Nahradit vlastními fotografiemi skutečných realizací před zveřejněním.</p>
+          <a href="#kontakt" className="button-secondary decision-cta">Požádat o předběžný odhad <ArrowUpRight size={15} /></a>
         </div>
       </section>
 
@@ -171,20 +174,6 @@ function App() {
               </article>
             ))}
           </div>
-        </div>
-      </section>
-
-      <section id="o-nas" className="about-section motion-section">
-        <div className="about-photo">
-          <img src="https://images.unsplash.com/photo-1486262715619-67b85e0b08d3?auto=format&fit=crop&w=1400&q=85" alt="Práce na detailu automobilu" loading="lazy" onError={(event) => { event.currentTarget.onerror = null; event.currentTarget.src = "https://images.unsplash.com/photo-1503376780353-7e6692767b70?auto=format&fit=crop&w=1400&q=85" }} />
-          <div className="photo-stamp"><span>VRB.</span><small>DETAILING / STŘÍBRO</small></div>
-        </div>
-        <div className="about-copy reveal">
-          <span className="eyebrow"><i />Přístup VRB DETAILING</span>
-          <h2>Žádné univerzální balíčky. <em>Nejdřív se podíváme na vůz.</em></h2>
-          <p>Rozdíl mezi běžným umytím a detailingem není v počtu použitých přípravků. Je v tom, že se zvolí správný postup pro konkrétní povrch, materiál a stav vozidla.</p>
-          <p>Proto začínáme rozhovorem a posouzením. Doporučíme jen práci, která má pro váš vůz skutečný přínos.</p>
-          <a href="#kontakt" className="text-link">Probrat váš vůz <ArrowUpRight size={15} /></a>
         </div>
       </section>
 
@@ -229,8 +218,8 @@ function App() {
               </label>
             </div>
             <label>Co bychom měli vědět?<textarea name="message" rows="4" placeholder="Popište stav vozu nebo svou představu." /></label>
-            <button className="button-primary form-submit" type="submit">Připravit poptávku <ArrowRight size={16} /></button>
-            <p className="form-privacy">Odesílání formuláře bude aktivní po připojení e-mailu nebo formulářové služby.</p>
+            <button className="button-primary form-submit" type="submit" disabled>Odesílání zatím není aktivní</button>
+            <p className="form-privacy">Tento formulář zatím poptávku neodešle. Před zveřejněním je nutné připojit funkční odesílání a doplnit informace o zpracování osobních údajů.</p>
             {formMessage && <p className="form-message" role="status">{formMessage}</p>}
           </form>
         </div>
