@@ -1,4 +1,4 @@
-import { ArrowUpRight } from 'lucide-react'
+import { ArrowUpRight, ChevronDown } from 'lucide-react'
 
 const navigation = [
   { label: 'Služby', href: '#sluzby' },
@@ -24,6 +24,12 @@ export default function Navbar() {
             </a>
           ))}
         </div>
+        <details className="mobile-nav">
+          <summary>Menu <ChevronDown size={14} /></summary>
+          <div className="mobile-nav-panel">
+            {navigation.map(item => <a key={item.label} href={item.href}>{item.label}</a>)}
+          </div>
+        </details>
         <a href="#kontakt" className="button-nav group">
           <span>Poptat službu</span>
           <ArrowUpRight size={14} aria-hidden="true" className="transition-transform duration-200 group-hover:-translate-y-0.5 group-hover:translate-x-0.5" />
