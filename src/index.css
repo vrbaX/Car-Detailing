@@ -1297,3 +1297,59 @@ html { scroll-padding-top: 92px; }
 .account-booking-form input[type="time"]::-webkit-datetime-edit {
   color: var(--pearl);
 }
+
+
+/* Navigation actions: account access is the rightmost, persistent action */
+.nav-actions{display:flex;align-items:center;gap:10px}
+.account-nav-button{min-width:88px;justify-content:center;border:1px solid rgba(240,238,232,.24);background:rgba(255,255,255,.045)}
+.account-nav-button:hover{border-color:rgba(212,0,0,.8);background:rgba(212,0,0,.12)}
+@media(max-width:700px){.nav-actions{gap:7px}.nav-actions .button-nav{padding-inline:11px}.account-nav-button{min-width:0}.account-nav-button span{display:none}}
+
+/* Staff dashboard: readable job cards with clear hierarchy and useful metadata */
+.staff-booking{position:relative;overflow:hidden;display:grid;grid-template-columns:minmax(0,1fr) minmax(190px,230px);align-items:center;gap:28px;padding:24px 26px;border:1px solid rgba(255,255,255,.1);border-radius:12px;background:linear-gradient(115deg,rgba(35,41,44,.92),rgba(17,20,22,.98));transition:transform .28s cubic-bezier(.2,.7,.2,1),border-color .28s,background .28s,box-shadow .28s}
+.staff-booking::before{content:"";position:absolute;inset:0 auto 0 0;width:2px;background:var(--rosso);opacity:.72;transform:scaleY(.35);transform-origin:center;transition:transform .28s}
+.staff-booking:hover{transform:translateY(-3px);border-color:rgba(212,0,0,.34);box-shadow:0 16px 38px rgba(0,0,0,.2)}
+.staff-booking:hover::before{transform:scaleY(1)}
+.staff-booking-heading{display:flex;align-items:center;gap:12px;flex-wrap:wrap;margin-bottom:12px}
+.staff-status{display:inline-flex;align-items:center;gap:7px;padding:6px 9px;border:1px solid rgba(255,255,255,.12);border-radius:999px;color:#d9ddda;background:rgba(255,255,255,.045);font-size:9px;font-weight:800;letter-spacing:.04em}
+.staff-status::before{content:"";width:6px;height:6px;border-radius:50%;background:#a5abad}
+.status-pending::before,.status-rescheduled::before{background:#d9a64d}
+.status-confirmed::before{background:#8aa7d8}
+.status-in_progress::before{background:#d40000;box-shadow:0 0 10px #d4000080}
+.status-quality_check::before{background:#c5a1e8}
+.status-ready_for_pickup::before,.status-completed::before{background:#80c99a}
+.status-cancelled::before{background:#8b9294}
+.staff-booking-id{color:#737d80;font-size:9px;font-weight:700;letter-spacing:.12em}
+.staff-booking h3{margin:0 0 12px;font-size:21px;letter-spacing:-.045em}
+.staff-booking-meta,.staff-booking-times{display:flex;align-items:center;gap:10px 20px;flex-wrap:wrap}
+.staff-booking-meta span,.staff-booking-times span{display:inline-flex;align-items:center;gap:7px;color:#aab1b2;font-size:10px}
+.staff-booking-meta svg,.staff-booking-times svg{color:#d40000;flex:none}
+.staff-booking-times{margin-top:16px;padding-top:14px;border-top:1px solid rgba(255,255,255,.08)}
+.staff-booking-times b{color:#e4e5e1;font-weight:650}
+.staff-booking-note{margin:12px 0 0!important;color:#b9c0bd!important;font-size:10px!important}
+.staff-booking-controls label{display:flex;flex-direction:column;gap:9px;color:#929a9c;font-size:9px;font-weight:800;letter-spacing:.12em;text-transform:uppercase}
+.staff-booking-controls select{width:100%;min-height:44px;border-color:rgba(255,255,255,.16);background:#101416;cursor:pointer;transition:border-color .2s,background .2s}
+.staff-booking-controls select:focus{border-color:rgba(212,0,0,.8);outline:none}
+.staff-booking-controls select:disabled{opacity:.55;cursor:wait}
+
+/* Restrained motion across the portal, matching the landing page */
+@keyframes portalRise{from{opacity:0;transform:translate3d(0,14px,0)}to{opacity:1;transform:translate3d(0,0,0)}}
+.account-intro,.account-card,.account-topbar,.account-welcome,.account-section{animation:portalRise .65s cubic-bezier(.2,.7,.2,1) both}
+.account-card{animation-delay:.08s}
+.account-section:nth-of-type(2){animation-delay:.08s}
+.account-section:nth-of-type(3){animation-delay:.14s}
+.account-section:nth-of-type(4){animation-delay:.2s}
+.staff-booking{animation:portalRise .48s cubic-bezier(.2,.7,.2,1) both}
+.staff-booking:nth-child(2){animation-delay:.05s}
+.staff-booking:nth-child(3){animation-delay:.1s}
+.staff-booking:nth-child(4){animation-delay:.15s}
+.staff-booking:nth-child(5){animation-delay:.2s}
+.account-vehicle,.customer-booking{transition:transform .25s,border-color .25s,background .25s}
+.account-vehicle:hover,.customer-booking:hover{transform:translateY(-2px);border-color:rgba(212,0,0,.28)}
+.account-outline-button,.account-top-actions button,.account-switch button,.account-text-button{transition:color .2s,border-color .2s,background .2s,transform .2s}
+.account-outline-button:hover,.account-top-actions button:hover,.account-switch button:hover,.account-text-button:hover{color:#fff}
+.account-top-actions button:hover,.account-outline-button:hover{transform:translateY(-1px)}
+.account-form input,.account-inline-form input,.account-inline-form select,.account-booking-form input,.account-booking-form select,.account-booking-form textarea{transition:border-color .2s,background .2s,box-shadow .2s}
+.account-form input:focus,.account-inline-form input:focus,.account-inline-form select:focus,.account-booking-form input:focus,.account-booking-form select:focus,.account-booking-form textarea:focus{box-shadow:0 0 0 3px rgba(212,0,0,.09)}
+@media(max-width:760px){.staff-booking{grid-template-columns:1fr;gap:20px;padding:21px}.staff-booking-controls{width:100%}.staff-booking h3{font-size:19px}}
+@media(prefers-reduced-motion:reduce){.account-intro,.account-card,.account-topbar,.account-welcome,.account-section,.staff-booking{animation:none!important}.staff-booking,.account-vehicle,.customer-booking,.account-submit{transition:none!important}.staff-booking:hover,.account-vehicle:hover,.customer-booking:hover,.account-submit:hover{transform:none}}
