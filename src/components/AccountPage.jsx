@@ -407,16 +407,18 @@ export default function AccountPage() {
                     ) : (
                       <>
                         {booking.status === 'rescheduled' && <div className="booking-exception">U zakázky se mění termín. Aktuální průběh níže vychází z posledního potvrzeného kroku.</div>}
-                        <div className="booking-progress" role="progressbar" aria-label="Průběh zakázky" aria-valuemin="0" aria-valuemax="100" aria-valuenow={Math.round(progressPercent)}>
-                          <div className="booking-progress-fill" style={{width: progressPercent + '%'}} />
-                        </div>
-                        <div className="booking-progress-steps">
-                          {progressSteps.map((step, index) => (
-                            <div className={`booking-progress-step ${index < currentStep ? 'is-done' : ''} ${index === currentStep ? 'is-current' : ''}`} key={step}>
-                              <span className="booking-progress-node">{index < currentStep ? '✓' : index + 1}</span>
-                              <span>{progressLabels[index]}</span>
-                            </div>
-                          ))}
+                        <div className="booking-progress-visual">
+                          <div className="booking-progress" role="progressbar" aria-label="Průběh zakázky" aria-valuemin="0" aria-valuemax="100" aria-valuenow={Math.round(progressPercent)}>
+                            <div className="booking-progress-fill" style={{width: progressPercent + '%'}} />
+                          </div>
+                          <div className="booking-progress-steps">
+                            {progressSteps.map((step, index) => (
+                              <div className={`booking-progress-step ${index < currentStep ? 'is-done' : ''} ${index === currentStep ? 'is-current' : ''}`} key={step}>
+                                <span className="booking-progress-node">{index + 1}</span>
+                                <span className="booking-progress-label">{progressLabels[index]}</span>
+                              </div>
+                            ))}
+                          </div>
                         </div>
                       </>
                     )}
