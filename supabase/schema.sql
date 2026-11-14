@@ -14,12 +14,12 @@ create table if not exists public.profiles (
 create or replace function public.set_updated_at()
 returns trigger
 language plpgsql
-as $
+as $set_updated_at$
 begin
   NEW.updated_at := now();
   RETURN NEW;
 end;
-$;
+$set_updated_at$;
 
 drop trigger if exists profiles_set_updated_at on public.profiles;
 create trigger profiles_set_updated_at before update on public.profiles
