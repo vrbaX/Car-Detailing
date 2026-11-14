@@ -2029,3 +2029,13 @@ button:not(:disabled):active,
 .staff-search-summary b{color:#f0eee8;font-variant-numeric:tabular-nums}
 .staff-admin-label{padding:8px 10px;border:1px solid rgba(212,0,0,.2);border-radius:6px;color:#d8aaaa;font-size:9px;letter-spacing:.08em;text-transform:uppercase}
 @media(max-width:700px){.staff-search-section{padding:13px}.staff-search-control{gap:9px;padding:0 10px}.staff-search-control input{font-size:11px}}
+
+
+/* Admin global search refinements */
+.staff-search-tabs{display:flex;flex-wrap:wrap;gap:7px;margin-top:12px}
+.staff-search-tabs button{display:inline-flex;align-items:center;gap:9px;min-height:34px;padding:0 12px;border:1px solid rgba(255,255,255,.1);border-radius:7px;color:#aeb6b6;background:rgba(255,255,255,.025);font-size:10px;font-weight:700;cursor:pointer;transition:background .2s ease,border-color .2s ease,color .2s ease}
+.staff-search-tabs button:hover{border-color:rgba(212,0,0,.45);color:#f0eee8}
+.staff-search-tabs button.is-active{border-color:rgba(212,0,0,.65);color:#fff;background:rgba(212,0,0,.13)}
+.staff-search-tabs button b{min-width:18px;padding:2px 5px;border-radius:4px;color:#d9dddd;background:rgba(255,255,255,.08);font-size:9px;font-variant-numeric:tabular-nums}
+.staff-search-tabs button.is-active b{color:#fff;background:rgba(212,0,0,.35)}
+@media(prefers-reduced-motion:reduce){.staff-search-tabs button{transition:none}}
