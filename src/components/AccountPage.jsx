@@ -46,6 +46,17 @@ function localDate(value) {
   return new Intl.DateTimeFormat('cs-CZ', { dateStyle: 'medium', timeStyle: 'short' }).format(new Date(value))
 }
 
+async function fetchAllRows(buildQuery, pageSize = 500) {
+  const rows = []
+  for (let from = 0; ; from += pageSize) {
+    const { data, error } = await buildQuery().range(from, from + pageSize - 1)
+    if (error) return { data: null, error }
+    rows.push(...(data || []))
+    if (!data || data.length < pageSize) break
+  }
+  return { data: rows, error: null }
+}
+
 export default function AccountPage() {
   const [session, setSession] = useState(null)
   const [loading, setLoading] = useState(true)
@@ -124,7 +135,7 @@ export default function AccountPage() {
     setProfile(profileData)
 
     const [{ data: vehicleData, error: vehicleError }, { data: serviceData, error: serviceError }] = await Promise.all([
-      supabase.from('vehicles').select('*').order('created_at', { ascending: false }),
+      fetchAllRows(() => supabase.from('vehicles').select('*').order('created_at', { ascending: false })),
       supabase.from('service_catalog').select('id, name, estimated_minutes, buffer_minutes').eq('active', true).order('sort_order'),
     ])
     if (vehicleError) setError(getFriendlyError(vehicleError, 'vehicles'))
@@ -135,9 +146,11 @@ export default function AccountPage() {
     if (!bookingForm.service && serviceData?.[0]) setBookingForm(current => ({ ...current, service: serviceData[0].id }))
 
     const staff = ['admin', 'employee'].includes(profileData?.role)
-    let bookingQuery = supabase.from('bookings').select('*').order('start_at', { ascending: staff })
-    if (!staff) bookingQuery = bookingQuery.eq('customer_id', userId)
-    const { data: bookingData, error: bookingError } = await bookingQuery
+    const { data: bookingData, error: bookingError } = await fetchAllRows(() => {
+      let query = supabase.from('bookings').select('*').order('start_at', { ascending: staff })
+      if (!staff) query = query.eq('customer_id', userId)
+      return query
+    })
     if (bookingError) setError(getFriendlyError(bookingError, 'booking'))
     setBookings(bookingData || [])
 
@@ -148,7 +161,7 @@ export default function AccountPage() {
     } else setUpdates([])
 
     if (staff) {
-      const { data: people, error: peopleError } = await supabase.from('profiles').select('id, full_name, phone, email, role, created_at').order('created_at', { ascending: false })
+      const { data: people, error: peopleError } = await fetchAllRows(() => supabase.from('profiles').select('id, full_name, phone, email, role, created_at').order('created_at', { ascending: false }))
       if (peopleError) setError(getFriendlyError(peopleError, 'profile'))
       setTeam(people || [])
       setCustomers(Object.fromEntries((people || []).map(person => [person.id, person])))
