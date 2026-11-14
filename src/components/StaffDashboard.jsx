@@ -5,9 +5,13 @@ const statuses=['pending','confirmed','in_progress','quality_check','ready_for_p
 const employeeStatuses=['in_progress','quality_check','ready_for_pickup','completed']
 const date=value=>value?new Intl.DateTimeFormat('cs-CZ',{dateStyle:'medium',timeStyle:'short'}).format(new Date(value)):'Není stanoveno'
 
-function JobCard({booking,vehicle,customer,service,employee,employees,admin,busy,onStatusChange,onClaim,onAssign,onReschedule}){
+function JobCard({booking,vehicle,customer,service,employee,employees,updates=[],admin,busy,onStatusChange,onClaim,onAssign,onReschedule}){
  const canClaim=!admin&&booking.status==='confirmed'&&!booking.assigned_employee_id
  const [showDateEditor,setShowDateEditor]=useState(false)
+ const [rescheduleFeedback,setRescheduleFeedback]=useState('')
+ const lastDateChange=updates.find(item=>item.booking_id===booking.id&&item.message?.includes('změnil termín přistavení'))
+ const assignedEmployeeName=booking.assigned_employee_id?(employee?.full_name||employees.find(person=>person.id===booking.assigned_employee_id)?.full_name||'Zaměstnanec – profil se načítá') : null
+ const saveReschedule=async()=>{setRescheduleFeedback('saving');const saved=await onReschedule(booking.id,newDate,newTime);if(saved){setRescheduleFeedback('saved');setShowDateEditor(false)}else setRescheduleFeedback('')}
  const initialDate=new Date(booking.start_at)
  const toDateInput=value=>`${value.getFullYear()}-${String(value.getMonth()+1).padStart(2,'0')}-${String(value.getDate()).padStart(2,'0')}`
  const toTimeInput=value=>`${String(value.getHours()).padStart(2,'0')}:${String(value.getMinutes()).padStart(2,'0')}`
@@ -19,12 +23,13 @@ function JobCard({booking,vehicle,customer,service,employee,employees,admin,busy
    <h3>{vehicle?`${vehicle.make} ${vehicle.model}`:'Vozidlo'}</h3>
    <div className="staff-booking-meta"><span><UserRound size={14}/>{customer?.full_name||'Zákazník'}</span>{customer?.phone&&<span>{customer.phone}</span>}<span><CarFront size={14}/>{service?.name||'Služba'}</span></div>
    <div className="staff-booking-times"><span><CalendarDays size={14}/> Přistavení <b>{date(booking.start_at)}</b></span><span><Check size={14}/> Odhad dokončení <b>{date(booking.estimated_end_at)}</b></span></div>
-   <p className="staff-assignment-line"><UserRound size={14}/>{employee?`Přiřazeno: ${employee.full_name||'Člen týmu'}`:'Zatím nepřiřazeno'}</p>
+   <p className="staff-assignment-line"><UserRound size={14}/>{booking.assigned_employee_id?`Přiřazeno: ${assignedEmployeeName}`:'Zatím nepřiřazeno'}</p>
+   {lastDateChange&&<div className="staff-date-change"><CalendarDays size={14}/><span><b>Poslední změna termínu</b><small>{date(lastDateChange.created_at)} · {lastDateChange.message}</small></span></div>}
   </div>
   <div className="staff-booking-controls">
    {admin?<><label>Přiřazený zaměstnanec<select value={booking.assigned_employee_id||''} onChange={e=>onAssign(booking.id,e.target.value)} disabled={busy}>{['pending','confirmed'].includes(booking.status)&&<option value="">Volná zakázka</option>}{employees.map(person=><option key={person.id} value={person.id}>{person.full_name||'Zaměstnanec'}</option>)}</select></label>
    <label>Stav zakázky<select value={booking.status} onChange={e=>onStatusChange(booking,e.target.value)} disabled={busy}>{statuses.map(status=><option key={status} value={status}>{labels[status]}</option>)}</select></label>
-   {!['in_progress','quality_check','ready_for_pickup','completed','cancelled'].includes(booking.status)&&<div className="staff-reschedule"><button type="button" className="staff-reschedule-toggle" onClick={()=>{setNewDate(toDateInput(new Date(booking.start_at)));setNewTime(toTimeInput(new Date(booking.start_at)));setShowDateEditor(value=>!value)}} disabled={busy}><CalendarDays size={14}/>{showDateEditor?'Zavřít změnu termínu':'Změnit termín'}</button>{showDateEditor&&<div className="staff-reschedule-form"><label>Nové datum<input type="date" min={toDateInput(new Date())} value={newDate} onChange={e=>setNewDate(e.target.value)} required/></label><label>Nový čas<input type="time" value={newTime} onChange={e=>setNewTime(e.target.value)} required/></label><button type="button" className="account-submit" disabled={busy||!newDate||!newTime} onClick={()=>onReschedule(booking.id,newDate,newTime)}>Uložit nový termín <Check size={14}/></button><small>Délka služby a časová rezerva se přepočítají automaticky. Obsazený termín nepůjde uložit.</small></div>}</div>}</>
+   {!['in_progress','quality_check','ready_for_pickup','completed','cancelled'].includes(booking.status)&&<div className="staff-reschedule"><button type="button" className="staff-reschedule-toggle" onClick={()=>{setNewDate(toDateInput(new Date(booking.start_at)));setNewTime(toTimeInput(new Date(booking.start_at)));setShowDateEditor(value=>!value)}} disabled={busy}><CalendarDays size={14}/>{showDateEditor?'Zavřít změnu termínu':'Změnit termín'}</button>{showDateEditor&&<div className="staff-reschedule-form"><label>Nové datum<input type="date" min={toDateInput(new Date())} value={newDate} onChange={e=>setNewDate(e.target.value)} required/></label><label>Nový čas<input type="time" value={newTime} onChange={e=>setNewTime(e.target.value)} required/></label><button type="button" className="account-submit" disabled={busy||!newDate||!newTime} onClick={saveReschedule}>{rescheduleFeedback==='saving'?'Ukládám nový termín…':'Uložit nový termín'} <Check size={14}/></button>{rescheduleFeedback==='saving'&&<small className="staff-reschedule-progress">Probíhá kontrola dostupnosti a ukládání změny…</small>}{rescheduleFeedback==='saved'&&<small className="staff-reschedule-success">Termín byl úspěšně změněn a uložen do historie zakázky.</small>}<small>Délka služby a časová rezerva se přepočítají automaticky. Obsazený termín nepůjde uložit.</small></div>}</div>}</>
    :canClaim?<button className="account-submit staff-claim-button" type="button" onClick={()=>onClaim(booking.id)} disabled={busy}>Převzít zakázku <ArrowUpRight size={15}/></button>
    :booking.assigned_employee_id?<label>Stav mé zakázky<select value={booking.status} onChange={e=>onStatusChange(booking,e.target.value)} disabled={busy||booking.status==='pending'}>{[booking.status,...employeeStatuses.filter(status=>status!==booking.status)].map(status=><option key={status} value={status}>{labels[status]}</option>)}</select></label>
    :<span className="staff-job-locked">Čeká na potvrzení administrátorem</span>}
@@ -32,7 +37,7 @@ function JobCard({booking,vehicle,customer,service,employee,employees,admin,busy
  </article>
 }
 
-export default function StaffDashboard({profile,bookings,vehicles,services,customers,team,busy,onStatusChange,onClaim,onAssign,onReschedule,onRefresh,onRoleChange}){
+export default function StaffDashboard({profile,bookings,vehicles,services,customers,team,updates=[],busy,onStatusChange,onClaim,onAssign,onReschedule,onRefresh,onRoleChange}){
  const admin=profile?.role==='admin'
  const [searchTerm,setSearchTerm]=useState('')
  const [searchScope,setSearchScope]=useState('all')
@@ -58,7 +63,7 @@ export default function StaffDashboard({profile,bookings,vehicles,services,custo
  }),[bookings,vehicles,customers,services,team,normalizedSearch])
  const visibleTeam=normalizedSearch?filteredTeam:team.filter(person=>person.role!=='admin')
  const getEmployee=id=>team.find(p=>p.id===id)
- const job=b=><JobCard key={b.id} booking={b} vehicle={vehicles.find(v=>v.id===b.vehicle_id)} customer={customers[b.customer_id]} service={services.find(s=>s.id===b.service_id)} employee={getEmployee(b.assigned_employee_id)} employees={employees} admin={admin} busy={busy} onStatusChange={onStatusChange} onClaim={onClaim} onAssign={onAssign} onReschedule={onReschedule}/>
+ const job=b=><JobCard key={b.id} booking={b} vehicle={vehicles.find(v=>v.id===b.vehicle_id)} customer={customers[b.customer_id]} service={services.find(s=>s.id===b.service_id)} employee={getEmployee(b.assigned_employee_id)} employees={employees} admin={admin} busy={busy} onStatusChange={onStatusChange} onClaim={onClaim} onAssign={onAssign} onReschedule={onReschedule} updates={updates}/>
  return <>
   <section className="account-section"><div className="account-section-title"><div><span>{admin?'ADMINISTRACE':'PRACOVNÍ PŘEHLED'}</span><h2>{admin?'Provozní centrum':'Moje práce'}</h2></div><button type="button" className="staff-refresh-button" onClick={onRefresh} disabled={busy}><RefreshCw size={14}/> Obnovit přehled</button></div>
    <div className="staff-metrics-grid"><article><span>Čeká na potvrzení</span><strong>{bookings.filter(b=>b.status==='pending').length}</strong></article><article><span>Volné zakázky</span><strong>{available.length}</strong></article><article><span>Rozpracované</span><strong>{bookings.filter(b=>['in_progress','quality_check','ready_for_pickup'].includes(b.status)).length}</strong></article><article><span>Dokončené</span><strong>{bookings.filter(b=>b.status==='completed').length}</strong></article></div>
