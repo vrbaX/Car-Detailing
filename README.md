@@ -1,32 +1,11 @@
 # VRB DETAILING
 
-Homepage concept for a car detailing studio in Stříbro, Czech Republic.
+## Local development
 
-## Stack
+Install dependencies with `npm install`, copy `.env.example` to `.env.local`, set `VITE_SUPABASE_URL` and `VITE_SUPABASE_PUBLISHABLE_KEY`, then run `npm run dev`.
 
-- React
-- Vite
-- Tailwind CSS v4
-- lucide-react
+The publishable key is intended for browser use; Row Level Security protects database access. Never expose a Supabase secret/service-role key in frontend code or Git.
 
-## Development
+## Database
 
-Requirements: Node.js 20.19+ (or a compatible newer LTS release).
-
-```bash
-npm install
-npm run dev
-```
-
-Create a production build:
-
-```bash
-npm run build
-```
-
-## Notes
-
-- The interface currently uses CSS-generated backgrounds and no externally hosted stock photographs.
-- The mobile navigation links to services, pricing factors, process, and FAQs.
-- The contact form is intentionally disabled until a real submission endpoint and privacy information are configured.
-- No customer reviews, credentials, exact prices, or verified business contact details have been invented.
+Run `supabase/schema.sql` in the Supabase SQL Editor. It creates customer profiles, vehicles, services, bookings, job updates, RLS policies and an atomic booking-request function. Public registrations default to the customer role. Employee/admin roles must be assigned by a trusted administrator.
