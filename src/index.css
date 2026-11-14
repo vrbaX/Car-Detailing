@@ -1734,3 +1734,252 @@ html { scroll-padding-top: 92px; }
 @media(prefers-reduced-motion:reduce) {
   .booking-progress-node { transition: none!important; }
 }
+
+
+/* ------------------------------------------------------------------
+   VRB interaction system
+   One consistent motion language: primary / secondary / quiet actions.
+   Keep hover feedback subtle and disable it for reduced-motion users.
+------------------------------------------------------------------- */
+:root {
+  --motion-fast: 180ms cubic-bezier(.2,.7,.2,1);
+  --motion-standard: 240ms cubic-bezier(.2,.7,.2,1);
+  --motion-soft-shadow: 0 8px 22px rgba(0,0,0,.18);
+  --motion-red-shadow: 0 9px 24px rgba(212,0,0,.19);
+}
+
+/* Shared baseline for every real button, including controls without a class. */
+button,
+[role="button"] {
+  -webkit-tap-highlight-color: transparent;
+  transition:
+    color var(--motion-fast),
+    background-color var(--motion-fast),
+    border-color var(--motion-fast),
+    box-shadow var(--motion-fast),
+    transform var(--motion-fast),
+    opacity var(--motion-fast);
+}
+button:not(:disabled),
+[role="button"]:not([aria-disabled="true"]) {
+  cursor: pointer;
+}
+button:disabled,
+[role="button"][aria-disabled="true"] {
+  cursor: not-allowed;
+}
+
+/* Primary actions: same restrained lift and red feedback everywhere. */
+.button-primary,
+.account-submit {
+  transition:
+    color var(--motion-fast),
+    background-color var(--motion-fast),
+    border-color var(--motion-fast),
+    box-shadow var(--motion-fast),
+    transform var(--motion-fast);
+}
+@media (hover:hover) and (pointer:fine) {
+  .button-primary:hover:not(:disabled),
+  .account-submit:hover:not(:disabled) {
+    transform: translateY(-2px);
+    box-shadow: var(--motion-red-shadow);
+    filter: brightness(1.06);
+  }
+}
+
+/* Secondary actions: small lift, brighter border, restrained surface change. */
+.button-secondary,
+.button-nav,
+.account-outline-button,
+.account-back {
+  transition:
+    color var(--motion-fast),
+    background-color var(--motion-fast),
+    border-color var(--motion-fast),
+    box-shadow var(--motion-fast),
+    transform var(--motion-fast);
+}
+@media (hover:hover) and (pointer:fine) {
+  .button-secondary:hover,
+  .button-nav:hover,
+  .account-outline-button:hover,
+  .account-back:hover {
+    transform: translateY(-1px);
+    border-color: rgba(240,238,232,.48);
+    background-color: rgba(255,255,255,.075);
+    box-shadow: 0 6px 18px rgba(0,0,0,.13);
+  }
+  .account-outline-button:hover {
+    border-color: rgba(212,0,0,.5);
+    background-color: rgba(212,0,0,.075);
+  }
+}
+
+/* Quiet actions: feedback without making small utility controls compete with CTAs. */
+.account-text-button,
+.account-switch button,
+.account-top-actions button,
+.text-link,
+.footer-top,
+.faq-item button {
+  transition:
+    color var(--motion-fast),
+    background-color var(--motion-fast),
+    border-color var(--motion-fast),
+    transform var(--motion-fast);
+}
+@media (hover:hover) and (pointer:fine) {
+  .account-text-button:hover,
+  .account-switch button:hover,
+  .account-top-actions button:hover,
+  .text-link:hover,
+  .footer-top:hover {
+    color: #fff;
+  }
+  .account-text-button:hover,
+  .account-switch button:hover,
+  .account-top-actions button:hover {
+    transform: translateY(-1px);
+  }
+  .faq-item button:hover {
+    color: #fff;
+  }
+  .faq-item button:hover svg {
+    color: var(--rosso);
+    transform: translateY(2px);
+  }
+  .text-link:hover svg,
+  .footer-top:hover svg {
+    transform: translate(2px,-1px);
+  }
+}
+
+/* Navigation links use the same timing as buttons, with a quiet underline cue. */
+.site-header a:not(.button-nav),
+.account-brand {
+  transition: color var(--motion-fast), opacity var(--motion-fast);
+}
+.site-header a:not(.button-nav):focus-visible,
+.account-brand:focus-visible {
+  outline-offset: 5px;
+}
+
+/* Fields respond consistently instead of only changing on focus. */
+input,
+select,
+textarea {
+  transition:
+    color var(--motion-fast),
+    background-color var(--motion-fast),
+    border-color var(--motion-fast),
+    box-shadow var(--motion-fast);
+}
+@media (hover:hover) and (pointer:fine) {
+  input:not(:disabled):hover,
+  select:not(:disabled):hover,
+  textarea:not(:disabled):hover {
+    border-color: rgba(240,238,232,.3);
+  }
+}
+input:focus-visible,
+select:focus-visible,
+textarea:focus-visible {
+  outline: none;
+  border-color: rgba(212,0,0,.78);
+  box-shadow: 0 0 0 3px rgba(212,0,0,.1);
+}
+
+/* Interactive content surfaces get a low-key response, not a button-like jump. */
+.service-card,
+.step-row,
+.work-image,
+.faq-item,
+.account-vehicle,
+.customer-booking,
+.staff-booking {
+  transition:
+    transform var(--motion-standard),
+    border-color var(--motion-standard),
+    background-color var(--motion-standard),
+    box-shadow var(--motion-standard);
+}
+@media (hover:hover) and (pointer:fine) {
+  .service-card:hover,
+  .account-vehicle:hover,
+  .customer-booking:hover,
+  .staff-booking:hover {
+    border-color: rgba(212,0,0,.32);
+    box-shadow: 0 12px 30px rgba(0,0,0,.17);
+  }
+  .step-row:hover {
+    border-color: rgba(212,0,0,.38);
+  }
+  .faq-item:hover {
+    border-color: rgba(240,238,232,.22);
+  }
+  .work-image:hover {
+    border-color: rgba(240,238,232,.28);
+  }
+}
+
+/* A consistent tactile press state for buttons; no movement on disabled controls. */
+button:not(:disabled):active,
+[role="button"]:not([aria-disabled="true"]):active {
+  transform: scale(.985);
+}
+.faq-item button:active {
+  transform: none;
+}
+:focus-visible {
+  outline: 2px solid rgba(212,0,0,.9);
+  outline-offset: 4px;
+}
+
+/* Respect the user's motion preference across the complete interaction system. */
+@media (prefers-reduced-motion:reduce) {
+  button,
+  [role="button"],
+  .button-primary,
+  .button-secondary,
+  .button-nav,
+  .account-submit,
+  .account-outline-button,
+  .account-back,
+  .account-text-button,
+  .account-switch button,
+  .account-top-actions button,
+  .text-link,
+  .footer-top,
+  .faq-item button,
+  .site-header a,
+  .account-brand,
+  input,
+  select,
+  textarea,
+  .service-card,
+  .step-row,
+  .work-image,
+  .faq-item,
+  .account-vehicle,
+  .customer-booking,
+  .staff-booking {
+    transition: none !important;
+  }
+  button:not(:disabled):active,
+  [role="button"]:not([aria-disabled="true"]):active,
+  .button-primary:hover,
+  .button-secondary:hover,
+  .button-nav:hover,
+  .account-submit:hover,
+  .account-outline-button:hover,
+  .account-back:hover,
+  .service-card:hover,
+  .step-row:hover,
+  .work-image:hover,
+  .account-vehicle:hover,
+  .customer-booking:hover,
+  .staff-booking:hover {
+    transform: none !important;
+  }
+}
