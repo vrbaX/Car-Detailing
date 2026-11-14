@@ -16,7 +16,7 @@ function JobCard({booking,vehicle,customer,service,employee,employees,admin,busy
    <p className="staff-assignment-line"><UserRound size={14}/>{employee?`Přiřazeno: ${employee.full_name||'Člen týmu'}`:'Zatím nepřiřazeno'}</p>
   </div>
   <div className="staff-booking-controls">
-   {admin?<><label>Přiřazený zaměstnanec<select value={booking.assigned_employee_id||''} onChange={e=>onAssign(booking.id,e.target.value)} disabled={busy}><option value="">Volná zakázka</option>{employees.map(person=><option key={person.id} value={person.id}>{person.full_name||'Zaměstnanec'}</option>)}</select></label>
+   {admin?<><label>Přiřazený zaměstnanec<select value={booking.assigned_employee_id||''} onChange={e=>onAssign(booking.id,e.target.value)} disabled={busy}>{['pending','confirmed'].includes(booking.status)&&<option value="">Volná zakázka</option>}{employees.map(person=><option key={person.id} value={person.id}>{person.full_name||'Zaměstnanec'}</option>)}</select></label>
    <label>Stav zakázky<select value={booking.status} onChange={e=>onStatusChange(booking,e.target.value)} disabled={busy}>{statuses.map(status=><option key={status} value={status}>{labels[status]}</option>)}</select></label></>
    :canClaim?<button className="account-submit staff-claim-button" type="button" onClick={()=>onClaim(booking.id)} disabled={busy}>Převzít zakázku <ArrowUpRight size={15}/></button>
    :booking.assigned_employee_id?<label>Stav mé zakázky<select value={booking.status} onChange={e=>onStatusChange(booking,e.target.value)} disabled={busy||booking.status==='pending'}>{[booking.status,...employeeStatuses.filter(status=>status!==booking.status)].map(status=><option key={status} value={status}>{labels[status]}</option>)}</select></label>

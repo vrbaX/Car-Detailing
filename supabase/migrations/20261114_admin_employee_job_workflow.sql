@@ -47,6 +47,7 @@ begin
  select status,assigned_employee_id into v_status,v_old_employee from public.bookings where id=p_booking_id for update;
  if not found then raise exception 'Booking not found'; end if;
  if v_status in ('completed','cancelled') then raise exception 'Completed or cancelled jobs cannot be reassigned'; end if;
+ if p_employee_id is null and v_status not in ('pending','confirmed') then raise exception 'Active work must be reassigned directly to another employee'; end if;
  update public.bookings set assigned_employee_id=p_employee_id,assigned_at=case when p_employee_id is null then null else now() end,assigned_by=v_actor where id=p_booking_id;
  insert into public.job_updates(booking_id,author_id,status,message,visible_to_customer) values(p_booking_id,v_actor,v_status,case when p_employee_id is null then 'Zakázka byla uvolněna do nabídky zaměstnancům.' when v_old_employee is null then 'Zakázka byla přiřazena členovi týmu.' else 'Administrátor změnil přiřazení zakázky.' end,true);
 end; $$;
@@ -128,6 +129,7 @@ grant select on public.job_updates to authenticated;
 drop policy if exists "Staff manage services" on public.service_catalog;
 create policy "Admins manage services" on public.service_catalog for all to authenticated using(public.current_user_role()='admin') with check(public.current_user_role()='admin');
 
+revoke all on function public.sync_profile_email() from public,anon,authenticated;
 revoke all on function public.admin_set_user_role(uuid,text) from public,anon;
 revoke all on function public.claim_booking(uuid) from public,anon;
 revoke all on function public.admin_assign_booking(uuid,uuid) from public,anon;
