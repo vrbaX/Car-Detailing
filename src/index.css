@@ -2039,3 +2039,14 @@ button:not(:disabled):active,
 .staff-search-tabs button b{min-width:18px;padding:2px 5px;border-radius:4px;color:#d9dddd;background:rgba(255,255,255,.08);font-size:9px;font-variant-numeric:tabular-nums}
 .staff-search-tabs button.is-active b{color:#fff;background:rgba(212,0,0,.35)}
 @media(prefers-reduced-motion:reduce){.staff-search-tabs button{transition:none}}
+
+
+.staff-reschedule{display:grid;gap:9px;margin-top:4px}
+.staff-reschedule-toggle{display:inline-flex;align-items:center;justify-content:center;gap:8px;min-height:36px;padding:0 12px;border:1px solid rgba(212,0,0,.32);border-radius:7px;color:#f0eee8;background:rgba(212,0,0,.07);font:inherit;font-size:10px;font-weight:700;cursor:pointer;transition:background .2s,border-color .2s}
+.staff-reschedule-toggle:hover{border-color:rgba(212,0,0,.7);background:rgba(212,0,0,.14)}
+.staff-reschedule-form{display:grid;grid-template-columns:1fr 1fr;gap:9px;padding:12px;border:1px solid rgba(255,255,255,.1);border-radius:8px;background:rgba(0,0,0,.18)}
+.staff-reschedule-form label{display:grid;gap:6px;color:#aeb6b6;font-size:10px}
+.staff-reschedule-form input{width:100%;min-width:0;min-height:38px;padding:0 9px;border:1px solid rgba(255,255,255,.13);border-radius:6px;color:#f0eee8;background:#111517;color-scheme:dark;font:inherit;font-size:11px}
+.staff-reschedule-form .account-submit{grid-column:1/-1;justify-content:center;min-height:38px}
+.staff-reschedule-form small{grid-column:1/-1;color:#899496;font-size:9px;line-height:1.6}
+@media(max-width:700px){.staff-reschedule-form{grid-template-columns:1fr}}

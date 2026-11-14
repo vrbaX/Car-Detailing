@@ -25,7 +25,9 @@ function getFriendlyError(error, context = 'general') {
   if (message.includes('password') && (message.includes('weak') || message.includes('short') || message.includes('least'))) return 'Heslo nesplňuje bezpečnostní požadavky. Zvolte silnější heslo.'
   if (message.includes('invalid email') || message.includes('unable to validate email')) return 'Zadejte platnou e-mailovou adresu.'
   if (error?.status === 429 || message.includes('too many requests')) return 'Bylo provedeno příliš mnoho pokusů. Chvíli počkejte a zkuste to znovu.'
-  if (message.includes('this time is no longer available')) return 'Tento termín už není volný. Vyberte prosím jiný.'
+  if (message.includes('this time is no longer available') || message.includes('selected time is not available')) return 'Tento termín už není volný. Vyberte prosím jiný.'
+  if (message.includes('choose a future start time')) return 'Vyberte datum a čas v budoucnosti.'
+  if (message.includes('cannot reschedule a job after work has started')) return 'Termín již nelze změnit, protože práce na zakázce začala.'
   if (message.includes('choose a future start time')) return 'Vyberte datum a čas v budoucnosti.'
   if (message.includes('service is unavailable')) return 'Vybraná služba už není dostupná. Obnovte stránku a vyberte jinou.'
   if (message.includes('vehicle not found')) return 'Vybrané vozidlo se nepodařilo najít. Obnovte stránku a zkuste to znovu.'
@@ -262,7 +264,24 @@ export default function AccountPage() {
     setBusy(true); setError('')
     const { error: assignError } = await supabase.rpc('admin_assign_booking', { p_booking_id: bookingId, p_employee_id: employeeId || null })
     if (assignError) setError(getFriendlyError(assignError, 'booking'))
-    else { setMessage(employeeId ? 'Zakázka byla přiřazena zaměstnanci.' : 'Zakázka byla uvolněna do nabídky.'); await loadDashboard() }
+    else { setMessage(employeeId ? 'Zakázka byla potvrzena a přiřazena zaměstnanci.' : 'Zakázka byla uvolněna do nabídky.'); await loadDashboard() }
+    setBusy(false)
+  }
+
+  async function rescheduleJob(bookingId, date, time) {
+    setBusy(true); setError(''); setMessage('')
+    const localStart = new Date(`${date}T${time}`)
+    if (!date || !time || Number.isNaN(localStart.getTime()) || localStart <= new Date()) {
+      setError('Vyberte budoucí datum a čas.')
+      setBusy(false)
+      return
+    }
+    const { error: rescheduleError } = await supabase.rpc('admin_reschedule_booking', {
+      p_booking_id: bookingId,
+      p_new_start_at: localStart.toISOString(),
+    })
+    if (rescheduleError) setError(getFriendlyError(rescheduleError, 'booking'))
+    else { setMessage('Termín zakázky byl změněn. Průběh práce zůstal zachován.'); await loadDashboard() }
     setBusy(false)
   }
 
@@ -363,7 +382,7 @@ export default function AccountPage() {
         {loading ? <div className="account-loading">Načítání přehledu…</div> : staff ? (
           <StaffDashboard profile={profile} bookings={bookings} vehicles={vehicles} services={services}
             customers={customers} team={team} busy={busy} onStatusChange={changeJobStatus}
-            onClaim={claimJob} onAssign={assignJob} onRoleChange={setUserRole} />
+            onClaim={claimJob} onAssign={assignJob} onReschedule={rescheduleJob} onRoleChange={setUserRole} />
         ) : (
           <>
             <section className="account-section">
