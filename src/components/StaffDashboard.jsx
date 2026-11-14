@@ -31,7 +31,6 @@ export default function StaffDashboard({profile,bookings,vehicles,services,custo
  const employees=useMemo(()=>team.filter(p=>p.role==='employee'),[team])
  const available=useMemo(()=>bookings.filter(b=>b.status==='confirmed'&&!b.assigned_employee_id),[bookings])
  const mine=useMemo(()=>bookings.filter(b=>b.assigned_employee_id===profile?.id),[bookings,profile?.id])
- const active=useMemo(()=>bookings.filter(b=>!['completed','cancelled'].includes(b.status)),[bookings])
  const normalizedSearch=searchTerm.trim().toLocaleLowerCase('cs-CZ')
  const matches=(...values)=>!normalizedSearch||values.filter(Boolean).join(' ').toLocaleLowerCase('cs-CZ').includes(normalizedSearch)
  const filteredTeam=useMemo(()=>team.filter(person=>matches(person.full_name,person.email,person.phone,person.role,person.id)),[team,normalizedSearch])
