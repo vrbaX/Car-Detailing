@@ -185,7 +185,7 @@ begin
   v_end := p_start_at + make_interval(mins => v_duration);
   v_blocked_until := v_end + make_interval(mins => v_buffer);
 
-  perform pg_advisory_xact_lock(hashtext((p_start_at at time zone 'UTC')::date::text));
+  perform pg_advisory_xact_lock(hashtext('vrb-detailing-booking-calendar'));
 
   if exists (
     select 1 from public.bookings b

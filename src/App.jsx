@@ -55,9 +55,7 @@ function SectionHeading({ eyebrow, title, text, light = false }) {
   )
 }
 
-function App() {
-  if (window.location.pathname === '/ucet') return <AccountPage />
-
+function LandingPage() {
   const [openFaq, setOpenFaq] = useState(0)
   const [formMessage, setFormMessage] = useState('')
 
@@ -201,6 +199,10 @@ function App() {
       </footer>
     </main>
   )
+}
+
+function App() {
+  return window.location.pathname === '/ucet' ? <AccountPage /> : <LandingPage />
 }
 
 export default App
