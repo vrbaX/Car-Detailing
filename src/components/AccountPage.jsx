@@ -15,7 +15,7 @@ const statusLabels = {
 const progressSteps = ['confirmed', 'in_progress', 'quality_check', 'ready_for_pickup', 'completed']
 
 
-function getFriendlyAuthError(error) {
+function getFriendlyError(error, context = 'general') {
   const message = String(error?.message || '').toLowerCase()
   if (message.includes('invalid login credentials')) return 'Nesprávný e-mail nebo heslo. Zkontrolujte přihlašovací údaje a zkuste to znovu.'
   if (message.includes('email not confirmed')) return 'Nejdříve potvrďte svou e-mailovou adresu pomocí odkazu v e-mailu.'
@@ -23,8 +23,20 @@ function getFriendlyAuthError(error) {
   if (message.includes('password') && (message.includes('weak') || message.includes('short') || message.includes('least'))) return 'Heslo nesplňuje bezpečnostní požadavky. Zvolte silnější heslo.'
   if (message.includes('invalid email') || message.includes('unable to validate email')) return 'Zadejte platnou e-mailovou adresu.'
   if (error?.status === 429 || message.includes('too many requests')) return 'Bylo provedeno příliš mnoho pokusů. Chvíli počkejte a zkuste to znovu.'
+  if (message.includes('this time is no longer available')) return 'Tento termín už není volný. Vyberte prosím jiný.'
+  if (message.includes('choose a future start time')) return 'Vyberte datum a čas v budoucnosti.'
+  if (message.includes('service is unavailable')) return 'Vybraná služba už není dostupná. Obnovte stránku a vyberte jinou.'
+  if (message.includes('vehicle not found')) return 'Vybrané vozidlo se nepodařilo najít. Obnovte stránku a zkuste to znovu.'
+  if (error?.code === '23505') return 'Tento záznam už existuje.'
+  if (error?.code === '23503') return 'Záznam nelze uložit, protože související údaje už nejsou dostupné.'
+  if (error?.code === '42501' || message.includes('row-level security')) return 'K této akci nemáte oprávnění. Odhlaste se a znovu přihlaste; pokud problém přetrvá, kontaktujte správce.'
   if (message.includes('fetch') || message.includes('network')) return 'Nepodařilo se spojit se serverem. Zkontrolujte připojení a zkuste to znovu.'
-  return 'Přihlášení se nepodařilo. Zkontrolujte zadané údaje a zkuste to znovu.'
+  if (context === 'vehicle') return 'Vozidlo se nepodařilo uložit. Zkontrolujte údaje a zkuste to znovu.'
+  if (context === 'booking') return 'Žádost o termín se nepodařilo odeslat. Zkontrolujte údaje a zkuste to znovu.'
+  if (context === 'profile') return 'Nepodařilo se načíst zákaznický profil. Obnovte stránku nebo se znovu přihlaste.'
+  if (context === 'services') return 'Nepodařilo se načíst nabídku služeb. Obnovte stránku.'
+  if (context === 'vehicles') return 'Nepodařilo se načíst vaše vozidla. Obnovte stránku.'
+  return 'Něco se nepodařilo. Zkuste to prosím znovu.'
 }
 
 function localDate(value) {
@@ -47,7 +59,14 @@ export default function AccountPage() {
   const [customers, setCustomers] = useState({})
   const [vehicleForm, setVehicleForm] = useState({ make: '', model: '', year: '', registration: '' })
   const [bookingForm, setBookingForm] = useState({ vehicle: '', service: '', start: '', note: '' })
+  const [yearOptions] = useState(() => Array.from({ length: new Date().getFullYear() - 1885 }, (_, index) => String(new Date().getFullYear() + 1 - index)))
   const [showVehicleForm, setShowVehicleForm] = useState(false)
+
+  useEffect(() => {
+    if (!message) return undefined
+    const timeout = window.setTimeout(() => setMessage(''), 4500)
+    return () => window.clearTimeout(timeout)
+  }, [message])
 
   useEffect(() => {
     if (!supabaseConfigured) {
@@ -81,13 +100,15 @@ export default function AccountPage() {
     const userId = session.user.id
     const { data: profileData, error: profileError } = await supabase
       .from('profiles').select('id, full_name, phone, role').eq('id', userId).single()
-    if (profileError) setError(profileError.message)
+    if (profileError) setError(getFriendlyError(profileError, 'profile'))
     setProfile(profileData)
 
-    const [{ data: vehicleData }, { data: serviceData }] = await Promise.all([
+    const [{ data: vehicleData, error: vehicleError }, { data: serviceData, error: serviceError }] = await Promise.all([
       supabase.from('vehicles').select('*').order('created_at', { ascending: false }),
       supabase.from('service_catalog').select('id, name, estimated_minutes, buffer_minutes').eq('active', true).order('sort_order'),
     ])
+    if (vehicleError) setError(getFriendlyError(vehicleError, 'vehicles'))
+    if (serviceError) setError(getFriendlyError(serviceError, 'services'))
     setVehicles(vehicleData || [])
     setServices(serviceData || [])
     if (!bookingForm.vehicle && vehicleData?.[0]) setBookingForm(current => ({ ...current, vehicle: vehicleData[0].id }))
@@ -97,7 +118,7 @@ export default function AccountPage() {
     let bookingQuery = supabase.from('bookings').select('*').order('start_at', { ascending: staff })
     if (!staff) bookingQuery = bookingQuery.eq('customer_id', userId)
     const { data: bookingData, error: bookingError } = await bookingQuery
-    if (bookingError) setError(bookingError.message)
+    if (bookingError) setError(getFriendlyError(bookingError, 'booking'))
     setBookings(bookingData || [])
 
     const ids = (bookingData || []).map(item => item.id)
@@ -136,7 +157,7 @@ export default function AccountPage() {
     } else {
       result = await supabase.auth.signInWithPassword({ email, password })
     }
-    if (result?.error) setError(getFriendlyAuthError(result.error))
+    if (result?.error) setError(getFriendlyError(result.error, 'auth'))
     setBusy(false)
   }
 
@@ -149,7 +170,7 @@ export default function AccountPage() {
       year: vehicleForm.year ? Number(vehicleForm.year) : null,
       registration: vehicleForm.registration.trim() || null,
     })
-    if (insertError) setError(insertError.message)
+    if (insertError) setError(getFriendlyError(insertError, 'vehicle'))
     else {
       setVehicleForm({ make: '', model: '', year: '', registration: '' })
       setShowVehicleForm(false)
@@ -160,14 +181,23 @@ export default function AccountPage() {
   }
 
   async function requestBooking(event) {
-    event.preventDefault(); setBusy(true); setError(''); setMessage('')
+    event.preventDefault()
+    setBusy(true); setError(''); setMessage('')
+    const selectedDate = bookingForm.start.slice(0, 10)
+    const selectedTime = bookingForm.start.slice(11, 16)
+    const localStart = new Date(`${selectedDate}T${selectedTime}`)
+    if (!selectedDate || !selectedTime || Number.isNaN(localStart.getTime())) {
+      setError('Vyberte datum i čas přistavení vozidla.')
+      setBusy(false)
+      return
+    }
     const { error: requestError } = await supabase.rpc('request_booking', {
       p_vehicle_id: bookingForm.vehicle,
       p_service_id: bookingForm.service,
-      p_start_at: new Date(bookingForm.start).toISOString(),
+      p_start_at: localStart.toISOString(),
       p_customer_note: bookingForm.note.trim() || null,
     })
-    if (requestError) setError(requestError.message)
+    if (requestError) setError(getFriendlyError(requestError, 'booking'))
     else {
       setMessage('Žádost o termín byla odeslána. Počká na potvrzení.')
       setBookingForm(current => ({ ...current, start: '', note: '' }))
@@ -295,7 +325,7 @@ export default function AccountPage() {
               {showVehicleForm && <form className="account-inline-form" onSubmit={addVehicle}>
                 <input placeholder="Značka" value={vehicleForm.make} onChange={e => setVehicleForm({...vehicleForm,make:e.target.value})} required />
                 <input placeholder="Model" value={vehicleForm.model} onChange={e => setVehicleForm({...vehicleForm,model:e.target.value})} required />
-                <input placeholder="Rok" type="number" value={vehicleForm.year} onChange={e => setVehicleForm({...vehicleForm,year:e.target.value})} />
+                <select aria-label="Rok výroby" value={vehicleForm.year} onChange={e => setVehicleForm({...vehicleForm,year:e.target.value})}><option value="">Rok výroby</option>{yearOptions.map(year => <option key={year} value={year}>{year}</option>)}</select>
                 <input placeholder="SPZ (volitelné)" value={vehicleForm.registration} onChange={e => setVehicleForm({...vehicleForm,registration:e.target.value})} />
                 <button className="account-submit" disabled={busy}>Uložit vozidlo <Check size={15} /></button>
               </form>}
@@ -308,8 +338,9 @@ export default function AccountPage() {
               <div className="account-section-title"><div><span>REZERVACE</span><h2>Požádat o termín</h2></div></div>
               <form className="account-booking-form" onSubmit={requestBooking}>
                 <label>Vozidlo<select value={bookingForm.vehicle} onChange={e => setBookingForm({...bookingForm,vehicle:e.target.value})} required><option value="">Vyberte vozidlo</option>{vehicles.map(v => <option key={v.id} value={v.id}>{v.make} {v.model}</option>)}</select></label>
-                <label>Služba<select value={bookingForm.service} onChange={e => setBookingForm({...bookingForm,service:e.target.value})} required><option value="">Vyberte službu</option>{services.map(s => <option key={s.id} value={s.id}>{s.name}</option>)}</select></label>
-                <label>Datum a čas přistavení<input type="datetime-local" value={bookingForm.start} onChange={e => setBookingForm({...bookingForm,start:e.target.value})} min={new Date(Date.now()+3600000).toISOString().slice(0,16)} required /></label>
+                <label>Služba<select value={bookingForm.service} onChange={e => setBookingForm({...bookingForm,service:e.target.value})} required><option value="">Vyberte službu</option>{services.map(s => <option key={s.id} value={s.id}>{s.name} · {Math.round(s.estimated_minutes / 60 * 10) / 10} h práce</option>)}</select></label>
+                <label>Datum přistavení<input type="date" value={bookingForm.start.slice(0,10)} onChange={e => setBookingForm(current => ({...current,start:e.target.value ? `${e.target.value}T${current.start.slice(11,16) || '09:00'}` : ''}))} min={new Date().toLocaleDateString('en-CA')} required /></label>
+                <label>Čas přistavení<input type="time" value={bookingForm.start.slice(11,16)} onChange={e => setBookingForm(current => ({...current,start:current.start.slice(0,10) ? `${current.start.slice(0,10)}T${e.target.value}` : current.start}))} required /></label>
                 <label>Poznámka<textarea rows="2" placeholder="Doplňující informace k vozu nebo službě" value={bookingForm.note} onChange={e => setBookingForm({...bookingForm,note:e.target.value})} /></label>
                 <button className="account-submit" disabled={busy || !vehicles.length || !services.length}>Odeslat žádost <ArrowUpRight size={16} /></button>
                 {!services.length && <p className="account-hint">Služby zatím nejsou v systému nastavené.</p>}

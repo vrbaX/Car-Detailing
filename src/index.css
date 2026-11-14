@@ -1257,3 +1257,43 @@ html { scroll-padding-top: 92px; }
   -webkit-appearance: none;
   margin: 0;
 }
+
+
+/* Consistent native calendar, clock and select controls in the customer portal */
+.account-inline-form select,
+.account-booking-form input[type="date"],
+.account-booking-form input[type="time"] {
+  width: 100%;
+  min-width: 0;
+  min-height: 46px;
+  padding: 13px 15px;
+  border: 1px solid #ffffff20;
+  border-radius: 8px;
+  background: #111416;
+  color: var(--pearl);
+  color-scheme: dark;
+  font: inherit;
+  font-size: 12px;
+  outline: none;
+  accent-color: var(--rosso);
+}
+.account-inline-form select:focus,
+.account-booking-form input[type="date"]:focus,
+.account-booking-form input[type="time"]:focus {
+  border-color: #d40000a8;
+}
+.account-booking-form input[type="date"]::-webkit-calendar-picker-indicator,
+.account-booking-form input[type="time"]::-webkit-calendar-picker-indicator {
+  cursor: pointer;
+  opacity: .78;
+  filter: invert(1);
+}
+.account-booking-form select option,
+.account-inline-form select option {
+  background: #171a1d;
+  color: #f0eee8;
+}
+.account-booking-form input[type="date"]::-webkit-datetime-edit,
+.account-booking-form input[type="time"]::-webkit-datetime-edit {
+  color: var(--pearl);
+}
