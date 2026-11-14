@@ -45,6 +45,67 @@ const faqs = [
   ['Kdy se dozvím konečnou cenu?', 'Cenu stanovíme podle velikosti a stavu vozu a podle rozsahu požadované práce. Konkrétní částku vám sdělíme před zahájením; bez vašeho souhlasu žádné práce nezačneme.'],
 ]
 
+
+const calculatorServices = [
+  { id: 'interior', name: 'Hloubkové čištění interiéru', base: 2500 },
+  { id: 'exterior', name: 'Mytí a dekontaminace laku', base: 1500 },
+  { id: 'correction', name: 'Jednokrokové leštění laku', base: 5000 },
+  { id: 'protection', name: 'Keramická ochrana laku', base: 7000 },
+]
+const vehicleFactors = [
+  { id: 'compact', label: 'Malý vůz', factor: 1 },
+  { id: 'sedan', label: 'Sedan / kombi', factor: 1.15 },
+  { id: 'suv', label: 'SUV / crossover', factor: 1.3 },
+  { id: 'van', label: 'Dodávka / velký vůz', factor: 1.5 },
+]
+const conditionFactors = [
+  { id: 'normal', label: 'Běžný stav', factor: 1 },
+  { id: 'dirty', label: 'Silnější znečištění', factor: 1.2 },
+  { id: 'heavy', label: 'Velmi zanedbaný stav', factor: 1.4 },
+]
+
+function PriceCalculator() {
+  const [serviceId, setServiceId] = useState('interior')
+  const [vehicleId, setVehicleId] = useState('sedan')
+  const [conditionId, setConditionId] = useState('normal')
+  const service = calculatorServices.find(item => item.id === serviceId) || calculatorServices[0]
+  const vehicle = vehicleFactors.find(item => item.id === vehicleId) || vehicleFactors[1]
+  const condition = conditionFactors.find(item => item.id === conditionId) || conditionFactors[0]
+  const estimate = Math.round(service.base * vehicle.factor * condition.factor / 100) * 100
+
+  return (
+    <section className="price-calculator reveal" aria-labelledby="price-calculator-title">
+      <div className="price-calculator-heading">
+        <span className="eyebrow"><i /> RYCHLÝ ODHAD</span>
+        <h3 id="price-calculator-title">Spočítejte si <em>orientační cenu.</em></h3>
+        <p>Vyberte službu, velikost vozu a jeho aktuální stav. Výsledek se přepočítá automaticky.</p>
+      </div>
+      <div className="price-calculator-controls">
+        <label>Služba
+          <select value={serviceId} onChange={event => setServiceId(event.target.value)}>
+            {calculatorServices.map(item => <option key={item.id} value={item.id}>{item.name}</option>)}
+          </select>
+        </label>
+        <label>Velikost vozidla
+          <select value={vehicleId} onChange={event => setVehicleId(event.target.value)}>
+            {vehicleFactors.map(item => <option key={item.id} value={item.id}>{item.label}</option>)}
+          </select>
+        </label>
+        <label>Stav vozidla
+          <select value={conditionId} onChange={event => setConditionId(event.target.value)}>
+            {conditionFactors.map(item => <option key={item.id} value={item.id}>{item.label}</option>)}
+          </select>
+        </label>
+      </div>
+      <div className="price-calculator-result" aria-live="polite">
+        <div><span>VÁŠ ORIENTAČNÍ ODHAD</span><strong>{estimate.toLocaleString('cs-CZ')} Kč</strong><small>{service.name} · {vehicle.label.toLowerCase()} · {condition.label.toLowerCase()}</small></div>
+        <a href="#kontakt" className="button-primary">Upřesnit cenu <ArrowUpRight size={15} /></a>
+      </div>
+      <p className="price-calculator-footnote">Kalkulace vychází z ukázkových startovacích cen a orientačních koeficientů. Nejde o závaznou nabídku.</p>
+    </section>
+  )
+}
+
 function SectionHeading({ eyebrow, title, text, light = false }) {
   return (
     <div className="section-heading reveal">
@@ -139,8 +200,8 @@ function LandingPage() {
               <strong>od 7 000 Kč</strong>
             </article>
           </div>
-          <p className="pricing-note">Konečnou cenu potvrdíme po upřesnění modelu, velikosti a aktuálního stavu vozu — vždy před zahájením práce.</p>
-          <a href="#kontakt" className="button-primary pricing-cta">Nechat si spočítat cenu <ArrowUpRight size={15} /></a>
+          <PriceCalculator />
+          <p className="pricing-note">Výsledek je orientační výpočet z uvedených startovacích cen. Konečnou částku potvrdíme po kontrole vozu a rozsahu práce — vždy před zahájením.</p>
         </div>
       </section>
 

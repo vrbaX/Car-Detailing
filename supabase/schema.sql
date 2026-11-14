@@ -74,7 +74,7 @@ create table if not exists public.bookings (
   estimated_end_at timestamptz not null,
   blocked_until timestamptz not null,
   status text not null default 'pending'
-    check (status in ('pending','confirmed','in_progress','completed','cancelled','rescheduled')),
+    check (status in ('pending','confirmed','in_progress','quality_check','ready_for_pickup','completed','cancelled','rescheduled')),
   customer_note text,
   staff_note text,
   created_at timestamptz not null default now(),
@@ -89,7 +89,7 @@ create table if not exists public.job_updates (
   id uuid primary key default gen_random_uuid(),
   booking_id uuid not null references public.bookings(id) on delete cascade,
   author_id uuid references public.profiles(id) on delete set null,
-  status text not null check (status in ('pending','confirmed','in_progress','quality_check','ready_for_pickup','completed','cancelled')),
+  status text not null check (status in ('pending','confirmed','in_progress','quality_check','ready_for_pickup','completed','cancelled','rescheduled')),
   message text,
   visible_to_customer boolean not null default true,
   created_at timestamptz not null default now()

@@ -1558,3 +1558,85 @@ html { scroll-padding-top: 92px; }
   .account-inline-form select,.account-booking-form input,.account-booking-form select,
   .account-booking-form textarea,.account-outline-button { transition: none!important; }
 }
+
+
+/* Price estimate calculator — matches the existing carbon / pearl / red visual system */
+.price-calculator {
+  position: relative;
+  overflow: hidden;
+  margin-top: 42px;
+  padding: clamp(24px,4vw,42px);
+  border: 1px solid rgba(255,255,255,.13);
+  border-radius: 15px;
+  background: linear-gradient(135deg,rgba(34,40,43,.96),rgba(17,20,22,.98));
+  box-shadow: 0 24px 70px rgba(0,0,0,.2);
+}
+.price-calculator::before {
+  content:"";
+  position:absolute;
+  inset:0 0 auto;
+  height:2px;
+  background:linear-gradient(90deg,transparent,#d40000 30%,rgba(212,0,0,.16) 78%,transparent);
+}
+.price-calculator-heading { max-width:620px; }
+.price-calculator-heading h3 { margin:16px 0 10px; font-size:clamp(25px,3vw,36px); line-height:1.1; letter-spacing:-.055em; }
+.price-calculator-heading h3 em { color:#aeb4b5; font-family:Georgia,serif; font-weight:400; }
+.price-calculator-heading p { color:#aab1b2; font-size:12px; line-height:1.8; }
+.price-calculator-controls { display:grid; grid-template-columns:repeat(3,minmax(0,1fr)); gap:14px; margin-top:28px; }
+.price-calculator-controls label { display:grid; gap:9px; color:#cbd0cd; font-size:10px; font-weight:800; letter-spacing:.08em; text-transform:uppercase; }
+.price-calculator-controls select {
+  width:100%; min-height:48px; padding:0 14px; border:1px solid rgba(255,255,255,.15);
+  border-radius:8px; outline:none; background:#111416; color:#f0eee8; color-scheme:dark;
+  font:inherit; font-size:12px; letter-spacing:0; text-transform:none; transition:border-color .2s,box-shadow .2s;
+}
+.price-calculator-controls select:focus { border-color:#d40000; box-shadow:0 0 0 3px rgba(212,0,0,.12); }
+.price-calculator-result { display:flex; justify-content:space-between; align-items:center; gap:24px; margin-top:24px; padding:20px 22px; border:1px solid rgba(212,0,0,.22); border-radius:10px; background:linear-gradient(100deg,rgba(212,0,0,.09),rgba(255,255,255,.025)); }
+.price-calculator-result>div { display:grid; gap:5px; }
+.price-calculator-result span { color:#aab1b2; font-size:9px; font-weight:800; letter-spacing:.16em; }
+.price-calculator-result strong { color:#f0eee8; font-size:clamp(27px,4vw,38px); letter-spacing:-.055em; font-variant-numeric:tabular-nums; transition:transform .2s; }
+.price-calculator-result small { color:#aab1b2; font-size:10px; }
+.price-calculator-result .button-primary { flex-shrink:0; }
+.price-calculator-footnote { margin-top:13px; color:#7f888a; font-size:9px; line-height:1.7; }
+
+/* Six real job milestones, including the states staff can actually set */
+.booking-progress-steps { display:grid; grid-template-columns:repeat(6,minmax(0,1fr)); gap:5px; margin-top:15px; }
+.booking-progress-step { display:grid; justify-items:center; gap:8px; min-width:0; color:#7e888a; font-size:9px; text-align:center; transition:color .25s; }
+.booking-progress-node { display:grid; place-items:center; width:23px; height:23px; border:1px solid rgba(255,255,255,.2); border-radius:50%; color:#aab1b2; background:#171b1d; font-size:9px; transition:background .25s,border-color .25s,color .25s,box-shadow .25s,transform .25s; }
+.booking-progress-step.is-done { color:#c7ceca; }
+.booking-progress-step.is-done .booking-progress-node { border-color:rgba(212,0,0,.55); color:#fff; background:#a90000; }
+.booking-progress-step.is-current { color:#fff; }
+.booking-progress-step.is-current .booking-progress-node { border-color:#ff4a4a; color:#fff; background:#d40000; box-shadow:0 0 0 4px rgba(212,0,0,.13),0 0 18px rgba(212,0,0,.28); transform:scale(1.08); }
+.booking-status-dot.is-cancelled { background:#777f81; box-shadow:none; }
+.booking-status-dot.is-complete { background:#77b88a; box-shadow:0 0 14px rgba(119,184,138,.35); }
+.booking-exception { margin-top:18px; padding:12px 14px; border:1px solid rgba(212,0,0,.25); border-radius:8px; background:rgba(212,0,0,.07); color:#e5c3c3; font-size:11px; line-height:1.7; }
+
+/* Consistent, restrained motion for portal interactions and conditional panels */
+@keyframes portalDropIn { from { opacity:0; transform:translateY(-10px) scale(.99); } to { opacity:1; transform:translateY(0) scale(1); } }
+@keyframes portalSoftIn { from { opacity:0; transform:translateY(9px); } to { opacity:1; transform:translateY(0); } }
+.account-inline-form,.account-booking-form,.customer-booking,.staff-booking,.account-vehicle,.account-section-title,
+.account-alert,.price-calculator-result { animation:portalSoftIn .42s cubic-bezier(.2,.7,.2,1) both; }
+.account-inline-form { transform-origin:top center; animation-name:portalDropIn; }
+.account-vehicle,.customer-booking,.staff-booking { transition:transform .25s cubic-bezier(.2,.7,.2,1),border-color .25s,box-shadow .25s; }
+.account-vehicle:hover,.customer-booking:hover { transform:translateY(-2px); border-color:rgba(255,255,255,.23); box-shadow:0 12px 30px rgba(0,0,0,.16); }
+.account-submit,.account-outline-button,.staff-booking-controls select,.account-top-actions button { transition:transform .2s,border-color .2s,background .2s,box-shadow .2s; }
+.account-outline-button:active,.account-submit:active { transform:scale(.98); }
+.booking-progress-fill { transition:width .55s cubic-bezier(.2,.7,.2,1); }
+.booking-progress-step { animation:portalSoftIn .35s ease both; }
+.booking-progress-step:nth-child(2) { animation-delay:.03s; }
+.booking-progress-step:nth-child(3) { animation-delay:.06s; }
+.booking-progress-step:nth-child(4) { animation-delay:.09s; }
+.booking-progress-step:nth-child(5) { animation-delay:.12s; }
+.booking-progress-step:nth-child(6) { animation-delay:.15s; }
+@media(max-width:700px) {
+  .price-calculator-controls { grid-template-columns:1fr; gap:12px; }
+  .price-calculator-result { align-items:flex-start; flex-direction:column; }
+  .price-calculator-result .button-primary { width:100%; justify-content:center; }
+  .booking-progress-steps { gap:2px; }
+  .booking-progress-step { font-size:7px; gap:6px; }
+  .booking-progress-node { width:20px; height:20px; font-size:8px; }
+}
+@media(prefers-reduced-motion:reduce) {
+  .account-inline-form,.account-booking-form,.customer-booking,.staff-booking,.account-vehicle,
+  .account-section-title,.account-alert,.price-calculator-result,.booking-progress-step { animation:none!important; }
+  .account-vehicle,.customer-booking,.staff-booking,.booking-progress-fill,.booking-progress-node { transition:none!important; }
+}

@@ -12,7 +12,8 @@ const statusLabels = {
   cancelled: 'Zrušeno',
   rescheduled: 'Změna termínu',
 }
-const progressSteps = ['confirmed', 'in_progress', 'quality_check', 'ready_for_pickup', 'completed']
+const progressSteps = ['pending', 'confirmed', 'in_progress', 'quality_check', 'ready_for_pickup', 'completed']
+const progressLabels = ['Přijato', 'Potvrzeno', 'V realizaci', 'Kontrola', 'Připraveno', 'Dokončeno']
 
 
 function getFriendlyError(error, context = 'general') {
@@ -220,13 +221,14 @@ export default function AccountPage() {
     setBusy(true); setError('')
     const { error: updateError } = await supabase.from('bookings').update({ status }).eq('id', booking.id)
     if (!updateError) {
-      await supabase.from('job_updates').insert({
+      const { error: historyError } = await supabase.from('job_updates').insert({
         booking_id: booking.id,
         author_id: session.user.id,
         status,
         message: statusLabels[status],
         visible_to_customer: true,
       })
+      if (historyError) setError('Stav zakázky se změnil, ale nepodařilo se uložit zprávu pro zákazníka. Obnovte přehled a zkontrolujte historii.')
       await loadDashboard()
     } else setError(getFriendlyError(updateError, 'booking'))
     setBusy(false)
@@ -241,6 +243,13 @@ export default function AccountPage() {
   const newestUpdate = useMemo(() => {
     const map = {}
     updates.forEach(item => { if (!map[item.booking_id]) map[item.booking_id] = item })
+    return map
+  }, [updates])
+  const latestProgressStatus = useMemo(() => {
+    const map = {}
+    updates.forEach(item => {
+      if (!map[item.booking_id] && progressSteps.includes(item.status)) map[item.booking_id] = item.status
+    })
     return map
   }, [updates])
 
@@ -385,12 +394,33 @@ export default function AccountPage() {
               <div className="customer-booking-list">
                 {bookings.map(booking => {
                   const update = newestUpdate[booking.id]
-                  const currentStep = progressSteps.indexOf(update?.status || booking.status)
-                  const completed = booking.status === 'completed'
+                  const exceptional = ['cancelled', 'rescheduled'].includes(booking.status)
+                  const currentStatus = booking.status === 'rescheduled'
+                    ? (latestProgressStatus[booking.id] || 'confirmed')
+                    : (update?.status || booking.status)
+                  const currentStep = progressSteps.indexOf(currentStatus)
+                  const completed = currentStatus === 'completed'
+                  const progressPercent = completed ? 100 : Math.max(0, currentStep) / (progressSteps.length - 1) * 100
                   return <article className="customer-booking" key={booking.id}>
-                    <div className="customer-booking-head"><div><span className="account-kicker">{statusLabels[update?.status || booking.status] || booking.status}</span><h3>{vehicles.find(v => v.id === booking.vehicle_id)?.make} {vehicles.find(v => v.id === booking.vehicle_id)?.model}</h3><p>{localDate(booking.start_at)} · Předpokládané dokončení: {localDate(booking.estimated_end_at)}</p></div><span className="booking-status-dot" /></div>
-                    <div className="booking-progress"><div className="booking-progress-fill" style={{width: completed ? '100%' : currentStep < 0 ? '8%' : ((currentStep + 1) / progressSteps.length * 100) + '%'}} /></div>
-                    <div className="booking-progress-labels"><span>Přijato</span><span>V realizaci</span><span>Hotovo</span></div>
+                    <div className="customer-booking-head"><div><span className="account-kicker">{statusLabels[booking.status] || booking.status}</span><h3>{vehicles.find(v => v.id === booking.vehicle_id)?.make} {vehicles.find(v => v.id === booking.vehicle_id)?.model}</h3><p>{localDate(booking.start_at)} · Předpokládané dokončení: {localDate(booking.estimated_end_at)}</p></div><span className={`booking-status-dot ${booking.status === 'cancelled' ? 'is-cancelled' : completed ? 'is-complete' : ''}`} /></div>
+                    {booking.status === 'cancelled' ? (
+                      <div className="booking-exception">Tato zakázka byla zrušena. Pokud chcete domluvit nový termín, kontaktujte nás.</div>
+                    ) : (
+                      <>
+                        {booking.status === 'rescheduled' && <div className="booking-exception">U zakázky se mění termín. Aktuální průběh níže vychází z posledního potvrzeného kroku.</div>}
+                        <div className="booking-progress" role="progressbar" aria-label="Průběh zakázky" aria-valuemin="0" aria-valuemax="100" aria-valuenow={Math.round(progressPercent)}>
+                          <div className="booking-progress-fill" style={{width: progressPercent + '%'}} />
+                        </div>
+                        <div className="booking-progress-steps">
+                          {progressSteps.map((step, index) => (
+                            <div className={`booking-progress-step ${index < currentStep ? 'is-done' : ''} ${index === currentStep ? 'is-current' : ''}`} key={step}>
+                              <span className="booking-progress-node">{index < currentStep ? '✓' : index + 1}</span>
+                              <span>{progressLabels[index]}</span>
+                            </div>
+                          ))}
+                        </div>
+                      </>
+                    )}
                     {update?.message && <p className="booking-update">{update.message}</p>}
                   </article>
                 })}
