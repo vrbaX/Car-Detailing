@@ -28,7 +28,6 @@ function getFriendlyError(error, context = 'general') {
   if (message.includes('this time is no longer available') || message.includes('selected time is not available')) return 'Tento termín už není volný. Vyberte prosím jiný.'
   if (message.includes('choose a future start time')) return 'Vyberte datum a čas v budoucnosti.'
   if (message.includes('cannot reschedule a job after work has started')) return 'Termín již nelze změnit, protože práce na zakázce začala.'
-  if (message.includes('choose a future start time')) return 'Vyberte datum a čas v budoucnosti.'
   if (message.includes('service is unavailable')) return 'Vybraná služba už není dostupná. Obnovte stránku a vyberte jinou.'
   if (message.includes('vehicle not found')) return 'Vybrané vozidlo se nepodařilo najít. Obnovte stránku a zkuste to znovu.'
   if (error?.code === '23505') return 'Tento záznam už existuje.'
@@ -116,6 +115,16 @@ export default function AccountPage() {
     const timer = window.setTimeout(() => document.getElementById('rezervace')?.scrollIntoView({ behavior: 'smooth', block: 'start' }), 120)
     return () => window.clearTimeout(timer)
   }, [session, profile, loading])
+
+  useEffect(() => {
+    if (!session?.user || !['admin','employee'].includes(profile?.role)) return undefined
+    const channel = supabase.channel(`staff-bookings-${session.user.id}`)
+      .on('postgres_changes', { event: '*', schema: 'public', table: 'bookings' }, () => {
+        loadDashboard()
+      })
+      .subscribe()
+    return () => { supabase.removeChannel(channel) }
+  }, [session?.user?.id, profile?.role])
 
   useEffect(() => {
     if (!session?.user) {
@@ -382,7 +391,7 @@ export default function AccountPage() {
         {loading ? <div className="account-loading">Načítání přehledu…</div> : staff ? (
           <StaffDashboard profile={profile} bookings={bookings} vehicles={vehicles} services={services}
             customers={customers} team={team} busy={busy} onStatusChange={changeJobStatus}
-            onClaim={claimJob} onAssign={assignJob} onReschedule={rescheduleJob} onRoleChange={setUserRole} />
+            onClaim={claimJob} onAssign={assignJob} onReschedule={rescheduleJob} onRefresh={loadDashboard} onRoleChange={setUserRole} />
         ) : (
           <>
             <section className="account-section">

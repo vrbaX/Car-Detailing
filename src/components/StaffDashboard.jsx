@@ -1,5 +1,5 @@
 import { useMemo, useState } from 'react'
-import { ArrowUpRight, BriefcaseBusiness, CalendarDays, CarFront, Check, Search, ShieldCheck, UserRound, Users, X } from 'lucide-react'
+import { ArrowUpRight, BriefcaseBusiness, CalendarDays, CarFront, Check, RefreshCw, Search, ShieldCheck, UserRound, Users, X } from 'lucide-react'
 const labels={pending:'Čeká na potvrzení',confirmed:'Termín potvrzen',in_progress:'Práce probíhá',quality_check:'Závěrečná kontrola',ready_for_pickup:'Připraveno k vyzvednutí',completed:'Dokončeno',cancelled:'Zrušeno',rescheduled:'Změna termínu'}
 const statuses=['pending','confirmed','in_progress','quality_check','ready_for_pickup','completed','cancelled','rescheduled']
 const employeeStatuses=['in_progress','quality_check','ready_for_pickup','completed']
@@ -32,7 +32,7 @@ function JobCard({booking,vehicle,customer,service,employee,employees,admin,busy
  </article>
 }
 
-export default function StaffDashboard({profile,bookings,vehicles,services,customers,team,busy,onStatusChange,onClaim,onAssign,onReschedule,onRoleChange}){
+export default function StaffDashboard({profile,bookings,vehicles,services,customers,team,busy,onStatusChange,onClaim,onAssign,onReschedule,onRefresh,onRoleChange}){
  const admin=profile?.role==='admin'
  const [searchTerm,setSearchTerm]=useState('')
  const [searchScope,setSearchScope]=useState('all')
@@ -60,7 +60,7 @@ export default function StaffDashboard({profile,bookings,vehicles,services,custo
  const getEmployee=id=>team.find(p=>p.id===id)
  const job=b=><JobCard key={b.id} booking={b} vehicle={vehicles.find(v=>v.id===b.vehicle_id)} customer={customers[b.customer_id]} service={services.find(s=>s.id===b.service_id)} employee={getEmployee(b.assigned_employee_id)} employees={employees} admin={admin} busy={busy} onStatusChange={onStatusChange} onClaim={onClaim} onAssign={onAssign} onReschedule={onReschedule}/>
  return <>
-  <section className="account-section"><div className="account-section-title"><div><span>{admin?'ADMINISTRACE':'PRACOVNÍ PŘEHLED'}</span><h2>{admin?'Provozní centrum':'Moje práce'}</h2></div></div>
+  <section className="account-section"><div className="account-section-title"><div><span>{admin?'ADMINISTRACE':'PRACOVNÍ PŘEHLED'}</span><h2>{admin?'Provozní centrum':'Moje práce'}</h2></div><button type="button" className="staff-refresh-button" onClick={onRefresh} disabled={busy}><RefreshCw size={14}/> Obnovit přehled</button></div>
    <div className="staff-metrics-grid"><article><span>Čeká na potvrzení</span><strong>{bookings.filter(b=>b.status==='pending').length}</strong></article><article><span>Volné zakázky</span><strong>{available.length}</strong></article><article><span>Rozpracované</span><strong>{bookings.filter(b=>['in_progress','quality_check','ready_for_pickup'].includes(b.status)).length}</strong></article><article><span>Dokončené</span><strong>{bookings.filter(b=>b.status==='completed').length}</strong></article></div>
   </section>
   {admin&&<section className="account-section staff-search-section"><div className="staff-search-control"><Search size={18}/><input type="search" value={searchTerm} onChange={event=>setSearchTerm(event.target.value)} placeholder="Jméno, e-mail, telefon, vozidlo, SPZ nebo ID zakázky…" aria-label="Hledat v účtech a zakázkách" />{searchTerm&&<button type="button" onClick={()=>setSearchTerm('')} aria-label="Vymazat hledání"><X size={16}/></button>}</div><div className="staff-search-tabs" role="group" aria-label="Rozsah vyhledávání">{[{id:'all',label:'Vše',count:filteredTeam.length+filteredBookings.length},{id:'accounts',label:'Účty',count:filteredTeam.length},{id:'bookings',label:'Zakázky',count:filteredBookings.length}].map(tab=><button key={tab.id} type="button" className={searchScope===tab.id?'is-active':''} onClick={()=>setSearchScope(tab.id)} aria-pressed={searchScope===tab.id}>{tab.label}<b>{tab.count}</b></button>)}</div><p className="staff-search-summary">{normalizedSearch?<>Nalezeno <b>{filteredTeam.length}</b> účtů a <b>{filteredBookings.length}</b> zakázek. Hledání ignoruje diakritiku a formátování telefonních čísel.</>:'Vyhledávání prochází všechny načtené zákaznické účty i zakázky včetně vozidel, SPZ a přiřazených zaměstnanců.'}</p></section>}
