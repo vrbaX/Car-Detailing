@@ -283,15 +283,17 @@ export default function AccountPage() {
     if (!date || !time || Number.isNaN(localStart.getTime()) || localStart <= new Date()) {
       setError('Vyberte budoucí datum a čas.')
       setBusy(false)
-      return
+      return false
     }
     const { error: rescheduleError } = await supabase.rpc('admin_reschedule_booking', {
       p_booking_id: bookingId,
       p_new_start_at: localStart.toISOString(),
     })
-    if (rescheduleError) setError(getFriendlyError(rescheduleError, 'booking'))
-    else { setMessage('Termín zakázky byl změněn. Průběh práce zůstal zachován.'); await loadDashboard() }
+    if (rescheduleError) { setError(getFriendlyError(rescheduleError, 'booking')); setBusy(false); return false }
+    setMessage('Termín zakázky byl změněn. Průběh práce zůstal zachován.')
+    await loadDashboard()
     setBusy(false)
+    return true
   }
 
   async function setUserRole(userId, role) {
@@ -390,7 +392,7 @@ export default function AccountPage() {
         {message && <p className="account-alert account-success">{message}</p>}
         {loading ? <div className="account-loading">Načítání přehledu…</div> : staff ? (
           <StaffDashboard profile={profile} bookings={bookings} vehicles={vehicles} services={services}
-            customers={customers} team={team} busy={busy} onStatusChange={changeJobStatus}
+            customers={customers} team={team} updates={updates} busy={busy} onStatusChange={changeJobStatus}
             onClaim={claimJob} onAssign={assignJob} onReschedule={rescheduleJob} onRefresh={loadDashboard} onRoleChange={setUserRole} />
         ) : (
           <>
