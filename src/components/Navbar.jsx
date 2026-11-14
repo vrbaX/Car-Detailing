@@ -29,11 +29,15 @@ export default function Navbar() {
             {navigation.map(item => <a key={item.label} href={item.href}>{item.label}</a>)}
           </div>
         </details>
-        <a href="/ucet" className="button-nav group"><UserRound size={14} aria-hidden="true" /><span>Účet</span></a>
-        <a href="#kontakt" className="button-nav group">
-          <span>Poptat službu</span>
-          <ArrowUpRight size={14} aria-hidden="true" className="transition-transform duration-200 group-hover:-translate-y-0.5 group-hover:translate-x-0.5" />
-        </a>
+        <div className="nav-actions">
+          <a href="#kontakt" className="button-nav group">
+            <span>Poptat službu</span>
+            <ArrowUpRight size={14} aria-hidden="true" className="transition-transform duration-200 group-hover:-translate-y-0.5 group-hover:translate-x-0.5" />
+          </a>
+          <a href="/ucet" className="button-nav account-nav-button group" aria-label="Zákaznický účet">
+            <UserRound size={15} aria-hidden="true" /><span>Účet</span>
+          </a>
+        </div>
       </nav>
     </header>
   )
