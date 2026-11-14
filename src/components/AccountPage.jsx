@@ -161,7 +161,7 @@ export default function AccountPage() {
     } else setUpdates([])
 
     if (staff) {
-      const { data: people, error: peopleError } = await fetchAllRows(() => supabase.from('profiles').select('id, full_name, phone, email, role, created_at').order('created_at', { ascending: false }))
+      const { data: people, error: peopleError } = await fetchAllRows(() => supabase.from('profiles').select('id, full_name, phone, email, role, created_at').order('created_at', { ascending: false }).order('id', { ascending: true }))
       if (peopleError) setError(getFriendlyError(peopleError, 'profile'))
       setTeam(people || [])
       setCustomers(Object.fromEntries((people || []).map(person => [person.id, person])))
