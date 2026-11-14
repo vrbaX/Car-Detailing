@@ -1,6 +1,7 @@
 import { useEffect, useMemo, useState } from 'react'
 import { ArrowLeft, ArrowUpRight, CarFront, Check, Clock3, LogOut, Plus, ShieldCheck, UserRound } from 'lucide-react'
 import { supabase, supabaseConfigured } from '../lib/supabase'
+import StaffDashboard from './StaffDashboard'
 
 const statusLabels = {
   pending: 'Čeká na potvrzení',
@@ -58,6 +59,7 @@ export default function AccountPage() {
   const [bookings, setBookings] = useState([])
   const [updates, setUpdates] = useState([])
   const [customers, setCustomers] = useState({})
+  const [team, setTeam] = useState([])
   const [vehicleForm, setVehicleForm] = useState({ make: '', model: '', year: '', registration: '' })
   const [bookingForm, setBookingForm] = useState({ vehicle: '', service: '', start: '', note: '' })
   const [yearOptions] = useState(() => Array.from({ length: new Date().getFullYear() - 1885 }, (_, index) => String(new Date().getFullYear() + 1 - index)))
@@ -94,6 +96,13 @@ export default function AccountPage() {
     })
     return () => listener.subscription.unsubscribe()
   }, [])
+
+  useEffect(() => {
+    if (!session?.user || !profile || loading) return undefined
+    if (new URLSearchParams(window.location.search).get('rezervace') !== '1' || profile.role !== 'customer') return undefined
+    const timer = window.setTimeout(() => document.getElementById('rezervace')?.scrollIntoView({ behavior: 'smooth', block: 'start' }), 120)
+    return () => window.clearTimeout(timer)
+  }, [session, profile, loading])
 
   useEffect(() => {
     if (!session?.user) {
@@ -138,11 +147,12 @@ export default function AccountPage() {
       setUpdates(updateData || [])
     } else setUpdates([])
 
-    if (staff && bookingData?.length) {
-      const customerIds = [...new Set(bookingData.map(item => item.customer_id))]
-      const { data: people } = await supabase.from('profiles').select('id, full_name, phone').in('id', customerIds)
+    if (staff) {
+      const { data: people, error: peopleError } = await supabase.from('profiles').select('id, full_name, phone, email, role, created_at').order('created_at', { ascending: false })
+      if (peopleError) setError(getFriendlyError(peopleError, 'profile'))
+      setTeam(people || [])
       setCustomers(Object.fromEntries((people || []).map(person => [person.id, person])))
-    }
+    } else { setTeam([]); setCustomers({}) }
     setLoading(false)
   }
 
@@ -219,18 +229,35 @@ export default function AccountPage() {
 
   async function changeJobStatus(booking, status) {
     setBusy(true); setError('')
-    const { error: updateError } = await supabase.from('bookings').update({ status }).eq('id', booking.id)
-    if (!updateError) {
-      const { error: historyError } = await supabase.from('job_updates').insert({
-        booking_id: booking.id,
-        author_id: session.user.id,
-        status,
-        message: statusLabels[status],
-        visible_to_customer: true,
-      })
-      await loadDashboard()
-      if (historyError) setError('Stav zakázky se změnil, ale nepodařilo se uložit zprávu pro zákazníka. Obnovte přehled a zkontrolujte historii.')
-    } else setError(getFriendlyError(updateError, 'booking'))
+    const { error: updateError } = await supabase.rpc('staff_update_booking_status', {
+      p_booking_id: booking.id, p_status: status, p_message: statusLabels[status],
+    })
+    if (updateError) setError(getFriendlyError(updateError, 'booking'))
+    else await loadDashboard()
+    setBusy(false)
+  }
+
+  async function claimJob(bookingId) {
+    setBusy(true); setError(''); setMessage('')
+    const { error: claimError } = await supabase.rpc('claim_booking', { p_booking_id: bookingId })
+    if (claimError) setError(getFriendlyError(claimError, 'booking'))
+    else { setMessage('Zakázka byla přiřazena k vašemu účtu.'); await loadDashboard() }
+    setBusy(false)
+  }
+
+  async function assignJob(bookingId, employeeId) {
+    setBusy(true); setError('')
+    const { error: assignError } = await supabase.rpc('admin_assign_booking', { p_booking_id: bookingId, p_employee_id: employeeId || null })
+    if (assignError) setError(getFriendlyError(assignError, 'booking'))
+    else { setMessage(employeeId ? 'Zakázka byla přiřazena zaměstnanci.' : 'Zakázka byla uvolněna do nabídky.'); await loadDashboard() }
+    setBusy(false)
+  }
+
+  async function setUserRole(userId, role) {
+    setBusy(true); setError('')
+    const { error: roleError } = await supabase.rpc('admin_set_user_role', { p_user_id: userId, p_role: role })
+    if (roleError) setError(getFriendlyError(roleError, 'profile'))
+    else { setMessage(role === 'employee' ? 'Uživatel byl přidán do týmu.' : 'Role uživatele byla změněna.'); await loadDashboard() }
     setBusy(false)
   }
 
@@ -321,46 +348,9 @@ export default function AccountPage() {
         {error && <p className="account-alert account-error">{error}</p>}
         {message && <p className="account-alert account-success">{message}</p>}
         {loading ? <div className="account-loading">Načítání přehledu…</div> : staff ? (
-          <section className="account-section">
-            <div className="account-section-title"><div><span>AKTUÁLNÍ PŘEHLED</span><h2>Zakázky <b>{bookings.length}</b></h2></div></div>
-            <div className="staff-booking-list">
-              {bookings.map(booking => {
-                const vehicle = vehicles.find(item => item.id === booking.vehicle_id)
-                const customer = customers[booking.customer_id]
-                const service = services.find(item => item.id === booking.service_id)
-                const latest = newestUpdate[booking.id]
-                return (
-                  <article className="staff-booking" key={booking.id}>
-                    <div className="staff-booking-main">
-                      <div className="staff-booking-heading">
-                        <span className={`staff-status status-${booking.status}`}>{statusLabels[booking.status] || booking.status}</span>
-                        <span className="staff-booking-id">#{booking.id.slice(0, 8).toUpperCase()}</span>
-                      </div>
-                      <h3>{vehicle ? `${vehicle.make} ${vehicle.model}` : 'Vozidlo'}</h3>
-                      <div className="staff-booking-meta">
-                        <span><UserRound size={14} /> {customer?.full_name || 'Zákazník'}</span>
-                        {customer?.phone && <span>{customer.phone}</span>}
-                        <span><CarFront size={14} /> {service?.name || 'Služba'}</span>
-                      </div>
-                      <div className="staff-booking-times">
-                        <span><Clock3 size={14} /> Přistavení <b>{localDate(booking.start_at)}</b></span>
-                        <span><Check size={14} /> Odhad dokončení <b>{localDate(booking.estimated_end_at)}</b></span>
-                      </div>
-                      {latest?.message && <p className="staff-booking-note">Poslední aktualizace: {latest.message}</p>}
-                    </div>
-                    <div className="staff-booking-controls">
-                      <label>Stav zakázky
-                        <select value={booking.status} onChange={event => changeJobStatus(booking, event.target.value)} disabled={busy}>
-                          {['pending','confirmed','in_progress','quality_check','ready_for_pickup','completed','cancelled','rescheduled'].map(status => <option key={status} value={status}>{statusLabels[status]}</option>)}
-                        </select>
-                      </label>
-                    </div>
-                  </article>
-                )
-              })}
-              {!bookings.length && <p className="account-empty">Zatím zde nejsou žádné zakázky.</p>}
-            </div>
-          </section>
+          <StaffDashboard profile={profile} bookings={bookings} vehicles={vehicles} services={services}
+            customers={customers} team={team} busy={busy} onStatusChange={changeJobStatus}
+            onClaim={claimJob} onAssign={assignJob} onRoleChange={setUserRole} />
         ) : (
           <>
             <section className="account-section">
@@ -377,7 +367,7 @@ export default function AccountPage() {
                 {!vehicles.length && <p className="account-empty">Zatím nemáte přidané vozidlo.</p>}
               </div>
             </section>
-            <section className="account-section">
+            <section className="account-section" id="rezervace">
               <div className="account-section-title"><div><span>REZERVACE</span><h2>Požádat o termín</h2></div></div>
               <form className="account-booking-form" onSubmit={requestBooking}>
                 <label>Vozidlo<select value={bookingForm.vehicle} onChange={e => setBookingForm({...bookingForm,vehicle:e.target.value})} required><option value="">Vyberte vozidlo</option>{vehicles.map(v => <option key={v.id} value={v.id}>{v.make} {v.model}</option>)}</select></label>
