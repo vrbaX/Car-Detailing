@@ -218,7 +218,7 @@ export default function AccountPage() {
         visible_to_customer: true,
       })
       await loadDashboard()
-    } else setError(updateError.message)
+    } else setError(getFriendlyError(updateError, 'booking'))
     setBusy(false)
   }
 
@@ -340,7 +340,7 @@ export default function AccountPage() {
                 <label>Vozidlo<select value={bookingForm.vehicle} onChange={e => setBookingForm({...bookingForm,vehicle:e.target.value})} required><option value="">Vyberte vozidlo</option>{vehicles.map(v => <option key={v.id} value={v.id}>{v.make} {v.model}</option>)}</select></label>
                 <label>Služba<select value={bookingForm.service} onChange={e => setBookingForm({...bookingForm,service:e.target.value})} required><option value="">Vyberte službu</option>{services.map(s => <option key={s.id} value={s.id}>{s.name} · {Math.round(s.estimated_minutes / 60 * 10) / 10} h práce</option>)}</select></label>
                 <label>Datum přistavení<input type="date" value={bookingForm.start.slice(0,10)} onChange={e => setBookingForm(current => ({...current,start:e.target.value ? `${e.target.value}T${current.start.slice(11,16) || '09:00'}` : ''}))} min={new Date().toLocaleDateString('en-CA')} required /></label>
-                <label>Čas přistavení<input type="time" value={bookingForm.start.slice(11,16)} onChange={e => setBookingForm(current => ({...current,start:current.start.slice(0,10) ? `${current.start.slice(0,10)}T${e.target.value}` : current.start}))} required /></label>
+                <label>Čas přistavení<input type="time" value={bookingForm.start.slice(11,16)} min={bookingForm.start.slice(0,10) === new Date().toLocaleDateString('en-CA') ? new Date().toTimeString().slice(0,5) : undefined} onChange={e => setBookingForm(current => ({...current,start:current.start.slice(0,10) ? `${current.start.slice(0,10)}T${e.target.value}` : current.start}))} required /></label>
                 <label>Poznámka<textarea rows="2" placeholder="Doplňující informace k vozu nebo službě" value={bookingForm.note} onChange={e => setBookingForm({...bookingForm,note:e.target.value})} /></label>
                 <button className="account-submit" disabled={busy || !vehicles.length || !services.length}>Odeslat žádost <ArrowUpRight size={16} /></button>
                 {!services.length && <p className="account-hint">Služby zatím nejsou v systému nastavené.</p>}
