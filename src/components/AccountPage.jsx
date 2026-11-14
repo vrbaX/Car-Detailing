@@ -14,6 +14,19 @@ const statusLabels = {
 }
 const progressSteps = ['confirmed', 'in_progress', 'quality_check', 'ready_for_pickup', 'completed']
 
+
+function getFriendlyAuthError(error) {
+  const message = String(error?.message || '').toLowerCase()
+  if (message.includes('invalid login credentials')) return 'Nesprávný e-mail nebo heslo. Zkontrolujte přihlašovací údaje a zkuste to znovu.'
+  if (message.includes('email not confirmed')) return 'Nejdříve potvrďte svou e-mailovou adresu pomocí odkazu v e-mailu.'
+  if (message.includes('user already registered') || message.includes('already been registered')) return 'Účet s touto e-mailovou adresou už existuje. Přihlaste se nebo obnovte heslo.'
+  if (message.includes('password') && (message.includes('weak') || message.includes('short') || message.includes('least'))) return 'Heslo nesplňuje bezpečnostní požadavky. Zvolte silnější heslo.'
+  if (message.includes('invalid email') || message.includes('unable to validate email')) return 'Zadejte platnou e-mailovou adresu.'
+  if (error?.status === 429 || message.includes('too many requests')) return 'Bylo provedeno příliš mnoho pokusů. Chvíli počkejte a zkuste to znovu.'
+  if (message.includes('fetch') || message.includes('network')) return 'Nepodařilo se spojit se serverem. Zkontrolujte připojení a zkuste to znovu.'
+  return 'Přihlášení se nepodařilo. Zkontrolujte zadané údaje a zkuste to znovu.'
+}
+
 function localDate(value) {
   if (!value) return 'Termín zatím není stanoven'
   return new Intl.DateTimeFormat('cs-CZ', { dateStyle: 'medium', timeStyle: 'short' }).format(new Date(value))
@@ -123,7 +136,7 @@ export default function AccountPage() {
     } else {
       result = await supabase.auth.signInWithPassword({ email, password })
     }
-    if (result?.error) setError(result.error.message)
+    if (result?.error) setError(getFriendlyAuthError(result.error))
     setBusy(false)
   }
 
