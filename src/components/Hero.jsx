@@ -25,7 +25,7 @@ export default function Hero() {
             Čištění interiéru, korekce laku a jeho ochrana. Vyberte si službu nebo se ozvěte pro doporučení podle stavu vašeho vozu.
           </p>
           <div className="animate-fade-up delay-3 hero-actions">
-            <a href="#kontakt" className="button-primary group"><span>Domluvit konzultaci</span><ArrowRight size={15} className="transition-transform duration-200 group-hover:translate-x-1" /></a>
+            <a href="/ucet?rezervace=1" className="button-primary group"><span>Rezervovat termín</span><ArrowRight size={15} className="transition-transform duration-200 group-hover:translate-x-1" /></a>
             <a href="#sluzby" className="button-secondary">Prohlédnout služby</a>
           </div>
           <a href="#sluzby" className="hero-scroll">Prohlédnout nabídku <ArrowDown size={14} /></a>

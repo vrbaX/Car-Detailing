@@ -30,8 +30,8 @@ export default function Navbar() {
           </div>
         </details>
         <div className="nav-actions">
-          <a href="#kontakt" className="button-nav group">
-            <span>Poptat službu</span>
+          <a href="/ucet?rezervace=1" className="button-nav group">
+            <span>Rezervovat</span>
             <ArrowUpRight size={14} aria-hidden="true" className="transition-transform duration-200 group-hover:-translate-y-0.5 group-hover:translate-x-0.5" />
           </a>
           <a href="/ucet" className="button-nav account-nav-button group" aria-label="Zákaznický účet">

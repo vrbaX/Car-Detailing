@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react'
 import {
-  ArrowUpRight, ChevronDown,
+  ArrowUpRight, ChevronDown, Check,
   CircleDot, Clock3, Droplets, Gauge, ShieldCheck, Sparkles,
 } from 'lucide-react'
 import Navbar from './components/Navbar'
@@ -118,7 +118,6 @@ function SectionHeading({ eyebrow, title, text, light = false }) {
 
 function LandingPage() {
   const [openFaq, setOpenFaq] = useState(0)
-  const [formMessage, setFormMessage] = useState('')
 
   useEffect(() => {
     const elements = document.querySelectorAll('.reveal, .motion-section')
@@ -138,10 +137,6 @@ function LandingPage() {
     return () => observer.disconnect()
   }, [])
 
-  function handleSubmit(event) {
-    event.preventDefault()
-    setFormMessage('Odesílání poptávek zatím není nastavené.')
-  }
 
   return (
     <main className="min-h-screen bg-[#151719] text-[#F0EEE8]">
@@ -233,22 +228,18 @@ function LandingPage() {
             <div className="contact-detail"><Clock3 size={17} /><span>Termín po předchozí domluvě</span></div>
             <div className="contact-detail"><CircleDot size={17} /><span>Stříbro a okolí</span></div>
           </div>
-          <form className="consult-form reveal" onSubmit={handleSubmit}>
-            <div className="form-row">
-              <label>Jméno<input name="name" placeholder="Jak vám máme říkat?" required /></label>
-              <label>Telefon nebo e-mail<input name="contact" placeholder="Kam se vám ozvat?" required /></label>
+          <div className="consult-form booking-entry-card reveal">
+            <span className="eyebrow"><i /> ONLINE REZERVACE</span>
+            <h3>Vyberte termín.<br /><em>Zbytek vyřešíme společně.</em></h3>
+            <p>Rezervaci vytvoříte ve svém účtu. Vyberete vozidlo, službu a čas přistavení. Systém ověří kolizi s ostatními zakázkami a žádost odešle ke schválení.</p>
+            <div className="booking-entry-points">
+              <span><Check size={15} /> Kontrola kolizí s ostatními zakázkami</span>
+              <span><ShieldCheck size={15} /> Potvrzení termínu administrátorem</span>
+              <span><Clock3 size={15} /> Průběh zakázky ve vašem účtu</span>
             </div>
-            <div className="form-row">
-              <label>Vozidlo<input name="vehicle" placeholder="Značka, model, rok" /></label>
-              <label>Požadovaná služba
-                <select name="service" defaultValue=""><option value="" disabled>Vyberte službu</option><option>Čištění interiéru</option><option>Péče o exteriér</option><option>Korekce laku</option><option>Ochrana laku</option><option>Nejsem si jistý / jistá</option></select>
-              </label>
-            </div>
-            <label>Co bychom měli vědět?<textarea name="message" rows="4" placeholder="Popište stav vozu nebo svou představu." /></label>
-            <button className="button-primary form-submit" type="submit" disabled>Odesílání zatím není aktivní</button>
-            <p className="form-privacy">Tento formulář zatím poptávku neodešle. Před zveřejněním je nutné připojit funkční odesílání a doplnit informace o zpracování osobních údajů.</p>
-            {formMessage && <p className="form-message" role="status">{formMessage}</p>}
-          </form>
+            <a href="/ucet?rezervace=1" className="button-primary form-submit">Rezervovat termín <ArrowUpRight size={15} /></a>
+            <p className="form-privacy">Pro rezervaci je potřeba zákaznický účet. Registrace je zdarma a otevřená všem.</p>
+          </div>
         </div>
       </section>
 
