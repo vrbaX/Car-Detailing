@@ -149,9 +149,55 @@ create policy "Staff manage services" on public.service_catalog for all to authe
 using (public.current_user_role() in ('employee','admin'))
 with check (public.current_user_role() in ('employee','admin'));
 
+drop policy if exists "Owners and staff update vehicles" on public.vehicles;
+drop policy if exists "Owners and admins update vehicles" on public.vehicles;
+create policy "Owners and admins update vehicles" on public.vehicles for update to authenticated
+using (owner_id=(select auth.uid()) or public.current_user_role()='admin')
+with check (owner_id=(select auth.uid()) or public.current_user_role()='admin');
+
 drop policy if exists "Customers and staff read bookings" on public.bookings;
 create policy "Customers and staff read bookings" on public.bookings for select to authenticated
 using (customer_id = (select auth.uid()) or public.current_user_role() in ('employee','admin'));
+-- Employees can see only unassigned confirmed jobs and jobs assigned to themselves.
+drop policy if exists "Profiles readable by owner or staff" on public.profiles;
+drop policy if exists "Profiles readable by owner or relevant staff" on public.profiles;
+create policy "Profiles readable by owner or relevant staff" on public.profiles for select to authenticated
+using (
+ id=(select auth.uid()) or public.current_user_role()='admin'
+ or (public.current_user_role()='employee' and exists(
+  select 1 from public.bookings b where b.customer_id=profiles.id
+   and (b.assigned_employee_id=(select auth.uid()) or (b.status='confirmed' and b.assigned_employee_id is null))
+ ))
+);
+drop policy if exists "Customers and staff read vehicles" on public.vehicles;
+drop policy if exists "Customers and relevant staff read vehicles" on public.vehicles;
+create policy "Customers and relevant staff read vehicles" on public.vehicles for select to authenticated
+using (
+ owner_id=(select auth.uid()) or public.current_user_role()='admin'
+ or (public.current_user_role()='employee' and exists(
+  select 1 from public.bookings b where b.vehicle_id=vehicles.id
+   and (b.assigned_employee_id=(select auth.uid()) or (b.status='confirmed' and b.assigned_employee_id is null))
+ ))
+);
+drop policy if exists "Customers and staff read bookings" on public.bookings;
+drop policy if exists "Customers and relevant staff read bookings" on public.bookings;
+create policy "Customers and relevant staff read bookings" on public.bookings for select to authenticated
+using (
+ customer_id=(select auth.uid()) or public.current_user_role()='admin'
+ or (public.current_user_role()='employee' and (assigned_employee_id=(select auth.uid()) or (status='confirmed' and assigned_employee_id is null)))
+);
+drop policy if exists "Customers read visible job updates" on public.job_updates;
+drop policy if exists "Customers and relevant staff read job updates" on public.job_updates;
+create policy "Customers and relevant staff read job updates" on public.job_updates for select to authenticated
+using (
+ (visible_to_customer=true and exists(select 1 from public.bookings b where b.id=booking_id and b.customer_id=(select auth.uid())))
+ or public.current_user_role()='admin'
+ or (public.current_user_role()='employee' and exists(
+  select 1 from public.bookings b where b.id=booking_id
+   and (b.assigned_employee_id=(select auth.uid()) or (b.status='confirmed' and b.assigned_employee_id is null))
+ ))
+);
+
 drop policy if exists "Staff manage bookings" on public.bookings;
 create policy "Staff manage bookings" on public.bookings for all to authenticated
 using (public.current_user_role() in ('employee','admin'))
@@ -302,9 +348,13 @@ begin
  select status,assigned_employee_id into v_current_status,v_assignee from public.bookings where id=p_booking_id for update;
  if not found then raise exception 'Booking not found'; end if;
  if v_role='employee' then
-  if v_assignee<>v_actor then raise exception 'You can only update jobs assigned to you'; end if;
-  if p_status not in ('in_progress','quality_check','ready_for_pickup','completed') then raise exception 'Employees cannot set this booking status'; end if;
-  if v_current_status in ('completed','cancelled') then raise exception 'This job is already closed'; end if;
+  if v_assignee is distinct from v_actor then raise exception 'You can only update jobs assigned to you'; end if;
+  if (v_current_status='confirmed' and p_status<>'in_progress')
+    or (v_current_status='in_progress' and p_status<>'quality_check')
+    or (v_current_status='quality_check' and p_status<>'ready_for_pickup')
+    or (v_current_status='ready_for_pickup' and p_status<>'completed') then
+   raise exception 'Move the job to the next progress stage';
+  end if;
  end if;
  update public.bookings set status=p_status where id=p_booking_id;
  v_message:=coalesce(nullif(trim(p_message),''),'Stav zakázky: '||p_status);
