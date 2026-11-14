@@ -1353,3 +1353,208 @@ html { scroll-padding-top: 92px; }
 .account-form input:focus,.account-inline-form input:focus,.account-inline-form select:focus,.account-booking-form input:focus,.account-booking-form select:focus,.account-booking-form textarea:focus{box-shadow:0 0 0 3px rgba(212,0,0,.09)}
 @media(max-width:760px){.staff-booking{grid-template-columns:1fr;gap:20px;padding:21px}.staff-booking-controls{width:100%}.staff-booking h3{font-size:19px}}
 @media(prefers-reduced-motion:reduce){.account-intro,.account-card,.account-topbar,.account-welcome,.account-section,.staff-booking{animation:none!important}.staff-booking,.account-vehicle,.customer-booking,.account-submit{transition:none!important}.staff-booking:hover,.account-vehicle:hover,.customer-booking:hover,.account-submit:hover{transform:none}}
+
+
+/* Refined customer and staff portal — intentionally scoped away from the homepage */
+.account-shell {
+  position: relative;
+  isolation: isolate;
+  overflow: hidden;
+  padding-top: 24px;
+}
+.account-shell::before,.account-dashboard::before {
+  content: "";
+  position: absolute;
+  z-index: -1;
+  pointer-events: none;
+  width: min(62vw, 760px);
+  aspect-ratio: 1;
+  top: -28rem;
+  right: -18rem;
+  border-radius: 50%;
+  background: radial-gradient(circle,rgba(212,0,0,.105),transparent 68%);
+}
+.account-back {
+  min-height: 38px;
+  padding: 0 13px;
+  border: 1px solid rgba(255,255,255,.12);
+  border-radius: 999px;
+  background: rgba(255,255,255,.035);
+  transition: color .2s,border-color .2s,background .2s,transform .2s;
+}
+.account-back:hover {
+  color: #fff;
+  border-color: rgba(212,0,0,.45);
+  background: rgba(212,0,0,.08);
+  transform: translateX(-2px);
+}
+.account-auth-layout { position: relative; }
+.account-intro { animation: portalRise .7s cubic-bezier(.2,.7,.2,1) both; }
+.account-intro h1 { max-width: 590px; }
+.account-card {
+  position: relative;
+  overflow: hidden;
+  border-color: rgba(255,255,255,.13);
+  border-radius: 18px;
+  background: linear-gradient(145deg,rgba(34,40,43,.96),rgba(17,20,22,.98));
+  box-shadow: 0 32px 100px rgba(0,0,0,.38),inset 0 1px rgba(255,255,255,.045);
+}
+.account-card::before {
+  content: "";
+  position: absolute;
+  inset: 0 0 auto;
+  height: 2px;
+  background: linear-gradient(90deg,transparent,#d40000 28%,rgba(212,0,0,.2) 72%,transparent);
+  opacity: .8;
+}
+.account-card-heading h2 { font-size: clamp(28px,3vw,34px); }
+.account-form { gap: 19px; }
+.account-form label { gap: 9px; color: #d0d4d1; font-size: 10px; }
+.account-form input,.account-inline-form input,.account-inline-form select,
+.account-booking-form input,.account-booking-form select,.account-booking-form textarea,
+.staff-booking-controls select {
+  min-height: 47px;
+  border-color: rgba(255,255,255,.14);
+  border-radius: 9px;
+  background: rgba(8,11,12,.62);
+  transition: border-color .2s,background .2s,box-shadow .2s;
+}
+.account-form input:hover,.account-inline-form input:hover,.account-inline-form select:hover,
+.account-booking-form input:hover,.account-booking-form select:hover,.account-booking-form textarea:hover {
+  border-color: rgba(255,255,255,.27);
+}
+.account-form input:focus,.account-inline-form input:focus,.account-inline-form select:focus,
+.account-booking-form input:focus,.account-booking-form select:focus,.account-booking-form textarea:focus,
+.staff-booking-controls select:focus {
+  border-color: rgba(212,0,0,.82);
+  background: #111517;
+  box-shadow: 0 0 0 3px rgba(212,0,0,.11);
+}
+.account-submit {
+  min-height: 50px;
+  box-shadow: 0 8px 22px rgba(212,0,0,.14);
+}
+.account-submit:hover:not(:disabled) {
+  box-shadow: 0 11px 28px rgba(212,0,0,.24);
+  transform: translateY(-2px);
+}
+.account-text-button:hover,.account-switch button:hover { color: #ff7777; }
+.account-legal { padding-top: 14px; border-top: 1px solid rgba(255,255,255,.08); }
+.account-alert { border-radius: 10px; animation: portalRise .25s ease both; }
+.account-loading {
+  display: grid;
+  min-height: 170px;
+  place-items: center;
+  border: 1px solid rgba(255,255,255,.08);
+  border-radius: 14px;
+  background: rgba(255,255,255,.025);
+}
+.account-dashboard { position: relative; isolation: isolate; overflow: hidden; }
+.account-topbar {
+  position: relative;
+  z-index: 2;
+  backdrop-filter: blur(18px);
+  -webkit-backdrop-filter: blur(18px);
+  border-bottom-color: rgba(255,255,255,.1);
+}
+.account-brand { transition: opacity .2s; }
+.account-brand:hover { opacity: .78; }
+.account-content { position: relative; }
+.account-welcome { align-items: end; margin-bottom: 42px; }
+.account-welcome h1 { margin-top: 20px; }
+.account-section {
+  position: relative;
+  overflow: hidden;
+  margin-top: 22px;
+  padding: clamp(22px,3vw,32px);
+  border-color: rgba(255,255,255,.105);
+  border-radius: 15px;
+  background: linear-gradient(145deg,rgba(29,34,37,.96),rgba(17,20,22,.98));
+  box-shadow: 0 18px 48px rgba(0,0,0,.12);
+}
+.account-section-title {
+  padding-bottom: 19px;
+  border-bottom: 1px solid rgba(255,255,255,.085);
+  margin-bottom: 20px;
+}
+.account-section-title h2 { font-size: 27px; }
+.account-outline-button {
+  min-height: 40px;
+  border-color: rgba(255,255,255,.18);
+  background: rgba(255,255,255,.045);
+}
+.account-outline-button:hover {
+  border-color: rgba(212,0,0,.55);
+  background: rgba(212,0,0,.09);
+}
+.account-vehicle-grid { grid-template-columns: repeat(auto-fit,minmax(220px,1fr)); }
+.account-vehicle {
+  min-height: 78px;
+  border-color: rgba(255,255,255,.1);
+  border-radius: 11px;
+  background: linear-gradient(135deg,rgba(255,255,255,.045),rgba(255,255,255,.018));
+}
+.account-vehicle h3 { font-size: 14px; }
+.account-inline-form {
+  padding: 18px;
+  border: 1px solid rgba(255,255,255,.09);
+  border-radius: 11px;
+  background: rgba(0,0,0,.13);
+}
+.account-booking-form {
+  padding: 4px 0 0;
+  gap: 19px;
+}
+.account-booking-form label { gap: 9px; }
+.account-booking-form textarea { min-height: 86px; resize: vertical; }
+.account-booking-form .account-submit { min-width: 190px; }
+.account-hint { grid-column: 1/-1; margin-top: -5px; }
+.customer-booking-list,.staff-booking-list { gap: 14px; }
+.customer-booking {
+  padding: 23px;
+  border-color: rgba(255,255,255,.1);
+  border-radius: 12px;
+  background: linear-gradient(120deg,rgba(31,37,40,.9),rgba(16,19,21,.96));
+}
+.customer-booking-head h3 { margin-top: 11px; font-size: 20px; }
+.customer-booking-head .account-kicker { letter-spacing: .11em; }
+.booking-progress { height: 6px; background: rgba(255,255,255,.1); }
+.booking-progress-fill { background: linear-gradient(90deg,#a90000,#f12a2a); box-shadow: 0 0 14px rgba(212,0,0,.35); }
+.booking-progress-labels { color: #a0a7a8; }
+.booking-update { color: #dfe2de!important; }
+.account-empty {
+  padding: 24px;
+  border: 1px dashed rgba(255,255,255,.16);
+  border-radius: 10px;
+  color: #aab1b2;
+  background: rgba(255,255,255,.02);
+  text-align: center;
+}
+.staff-booking-list { padding-top: 2px; }
+.staff-booking {
+  border-color: rgba(255,255,255,.1);
+  border-radius: 13px;
+}
+.staff-booking-controls { align-self: stretch; display: flex; align-items: center; }
+.staff-booking-controls label { width: 100%; }
+.staff-booking-controls select { min-height: 46px; }
+@media(max-width:760px) {
+  .account-shell { padding: 18px 20px 48px; }
+  .account-auth-layout { margin-top: 22px; }
+  .account-intro h1 { font-size: clamp(42px,12vw,54px); }
+  .account-content { width: min(100% - 32px,1120px); padding: 34px 0 72px; }
+  .account-topbar { padding-inline: 18px; }
+  .account-welcome { margin-bottom: 28px; }
+  .account-welcome h1 { font-size: clamp(38px,10vw,52px); }
+  .account-section { margin-top: 15px; padding: 19px; }
+  .account-section-title { align-items: flex-start; }
+  .account-section-title h2 { font-size: 22px; }
+  .account-inline-form { padding: 13px; }
+  .customer-booking { padding: 18px; }
+  .booking-progress-labels { font-size: 8px; }
+}
+@media(prefers-reduced-motion:reduce) {
+  .account-back,.account-brand,.account-form input,.account-inline-form input,
+  .account-inline-form select,.account-booking-form input,.account-booking-form select,
+  .account-booking-form textarea,.account-outline-button { transition: none!important; }
+}

@@ -75,6 +75,16 @@ export default function AccountPage() {
     }
     supabase.auth.getSession().then(({ data }) => {
       setSession(data.session)
+      const callbackParams = new URLSearchParams(window.location.hash.slice(1))
+      const callbackError = callbackParams.get('error_description')
+      if (callbackError) {
+        setError('Potvrzení e-mailu se nepodařilo dokončit. Otevřete nejnovější potvrzovací e-mail a zkuste odkaz znovu.')
+      } else if (callbackParams.has('access_token') || callbackParams.get('type') === 'signup') {
+        setMessage('E-mailová adresa byla potvrzena. Váš účet je připravený.')
+      }
+      if (window.location.hash) {
+        window.history.replaceState({}, document.title, window.location.pathname + window.location.search)
+      }
       setLoading(false)
     })
     const { data: listener } = supabase.auth.onAuthStateChange((_event, nextSession) => {
