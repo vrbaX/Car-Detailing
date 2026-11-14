@@ -223,7 +223,7 @@ export default function AccountPage() {
   }
 
   async function signOut() {
-    await supabase.auth.signOut()
+    await supabase.auth.signOut({ scope: 'local' })
     window.location.href = '/'
   }
 
@@ -305,16 +305,40 @@ export default function AccountPage() {
           <section className="account-section">
             <div className="account-section-title"><div><span>AKTUÁLNÍ PŘEHLED</span><h2>Zakázky <b>{bookings.length}</b></h2></div></div>
             <div className="staff-booking-list">
-              {bookings.map(booking => (
-                <article className="staff-booking" key={booking.id}>
-                  <div><span className="account-kicker">{statusLabels[booking.status] || booking.status}</span><h3>{vehicles.find(v => v.id === booking.vehicle_id)?.make || 'Vozidlo'} {vehicles.find(v => v.id === booking.vehicle_id)?.model || ''}</h3><p>{customers[booking.customer_id]?.full_name || 'Zákazník'} · {localDate(booking.start_at)}</p><small>Odhad dokončení: {localDate(booking.estimated_end_at)}</small></div>
-                  <div className="staff-booking-controls">
-                    <select value={booking.status} onChange={event => changeJobStatus(booking, event.target.value)} disabled={busy}>
-                      {['pending','confirmed','in_progress','completed','cancelled'].map(status => <option key={status} value={status}>{statusLabels[status]}</option>)}
-                    </select>
-                  </div>
-                </article>
-              ))}
+              {bookings.map(booking => {
+                const vehicle = vehicles.find(item => item.id === booking.vehicle_id)
+                const customer = customers[booking.customer_id]
+                const service = services.find(item => item.id === booking.service_id)
+                const latest = newestUpdate[booking.id]
+                return (
+                  <article className="staff-booking" key={booking.id}>
+                    <div className="staff-booking-main">
+                      <div className="staff-booking-heading">
+                        <span className={`staff-status status-${booking.status}`}>{statusLabels[booking.status] || booking.status}</span>
+                        <span className="staff-booking-id">#{booking.id.slice(0, 8).toUpperCase()}</span>
+                      </div>
+                      <h3>{vehicle ? `${vehicle.make} ${vehicle.model}` : 'Vozidlo'}</h3>
+                      <div className="staff-booking-meta">
+                        <span><UserRound size={14} /> {customer?.full_name || 'Zákazník'}</span>
+                        {customer?.phone && <span>{customer.phone}</span>}
+                        <span><CarFront size={14} /> {service?.name || 'Služba'}</span>
+                      </div>
+                      <div className="staff-booking-times">
+                        <span><Clock3 size={14} /> Přistavení <b>{localDate(booking.start_at)}</b></span>
+                        <span><Check size={14} /> Odhad dokončení <b>{localDate(booking.estimated_end_at)}</b></span>
+                      </div>
+                      {latest?.message && <p className="staff-booking-note">Poslední aktualizace: {latest.message}</p>}
+                    </div>
+                    <div className="staff-booking-controls">
+                      <label>Stav zakázky
+                        <select value={booking.status} onChange={event => changeJobStatus(booking, event.target.value)} disabled={busy}>
+                          {['pending','confirmed','in_progress','quality_check','ready_for_pickup','completed','cancelled','rescheduled'].map(status => <option key={status} value={status}>{statusLabels[status]}</option>)}
+                        </select>
+                      </label>
+                    </div>
+                  </article>
+                )
+              })}
               {!bookings.length && <p className="account-empty">Zatím zde nejsou žádné zakázky.</p>}
             </div>
           </section>
