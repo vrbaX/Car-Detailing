@@ -228,8 +228,8 @@ export default function AccountPage() {
         message: statusLabels[status],
         visible_to_customer: true,
       })
-      if (historyError) setError('Stav zakázky se změnil, ale nepodařilo se uložit zprávu pro zákazníka. Obnovte přehled a zkontrolujte historii.')
       await loadDashboard()
+      if (historyError) setError('Stav zakázky se změnil, ale nepodařilo se uložit zprávu pro zákazníka. Obnovte přehled a zkontrolujte historii.')
     } else setError(getFriendlyError(updateError, 'booking'))
     setBusy(false)
   }
@@ -394,10 +394,9 @@ export default function AccountPage() {
               <div className="customer-booking-list">
                 {bookings.map(booking => {
                   const update = newestUpdate[booking.id]
-                  const exceptional = ['cancelled', 'rescheduled'].includes(booking.status)
                   const currentStatus = booking.status === 'rescheduled'
                     ? (latestProgressStatus[booking.id] || 'confirmed')
-                    : (update?.status || booking.status)
+                    : booking.status
                   const currentStep = progressSteps.indexOf(currentStatus)
                   const completed = currentStatus === 'completed'
                   const progressPercent = completed ? 100 : Math.max(0, currentStep) / (progressSteps.length - 1) * 100
