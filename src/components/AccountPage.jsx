@@ -135,7 +135,7 @@ export default function AccountPage() {
     setProfile(profileData)
 
     const [{ data: vehicleData, error: vehicleError }, { data: serviceData, error: serviceError }] = await Promise.all([
-      fetchAllRows(() => supabase.from('vehicles').select('*').order('created_at', { ascending: false })),
+      fetchAllRows(() => supabase.from('vehicles').select('*').order('created_at', { ascending: false }).order('id', { ascending: true })),
       supabase.from('service_catalog').select('id, name, estimated_minutes, buffer_minutes').eq('active', true).order('sort_order'),
     ])
     if (vehicleError) setError(getFriendlyError(vehicleError, 'vehicles'))
@@ -147,7 +147,7 @@ export default function AccountPage() {
 
     const staff = ['admin', 'employee'].includes(profileData?.role)
     const { data: bookingData, error: bookingError } = await fetchAllRows(() => {
-      let query = supabase.from('bookings').select('*').order('start_at', { ascending: staff })
+      let query = supabase.from('bookings').select('*').order('start_at', { ascending: staff }).order('id', { ascending: true })
       if (!staff) query = query.eq('customer_id', userId)
       return query
     })
