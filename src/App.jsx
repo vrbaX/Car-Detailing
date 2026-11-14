@@ -5,6 +5,7 @@ import {
 } from 'lucide-react'
 import Navbar from './components/Navbar'
 import Hero from './components/Hero'
+import AccountPage from './components/AccountPage'
 
 const services = [
   {
@@ -55,6 +56,8 @@ function SectionHeading({ eyebrow, title, text, light = false }) {
 }
 
 function App() {
+  if (window.location.pathname === '/ucet') return <AccountPage />
+
   const [openFaq, setOpenFaq] = useState(0)
   const [formMessage, setFormMessage] = useState('')
 

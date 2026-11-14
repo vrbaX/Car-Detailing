@@ -1,4 +1,4 @@
-import { ArrowUpRight, ChevronDown } from 'lucide-react'
+import { ArrowUpRight, ChevronDown, UserRound } from 'lucide-react'
 
 const navigation = [
   { label: 'Služby', href: '#sluzby' },
@@ -29,6 +29,7 @@ export default function Navbar() {
             {navigation.map(item => <a key={item.label} href={item.href}>{item.label}</a>)}
           </div>
         </details>
+        <a href="/ucet" className="button-nav group"><UserRound size={14} aria-hidden="true" /><span>Účet</span></a>
         <a href="#kontakt" className="button-nav group">
           <span>Poptat službu</span>
           <ArrowUpRight size={14} aria-hidden="true" className="transition-transform duration-200 group-hover:-translate-y-0.5 group-hover:translate-x-0.5" />
