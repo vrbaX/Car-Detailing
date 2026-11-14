@@ -89,3 +89,12 @@ revoke all on function public.admin_reschedule_booking(uuid,timestamptz) from pu
 grant execute on function public.admin_reschedule_booking(uuid,timestamptz) to authenticated;
 revoke all on function public.admin_assign_booking(uuid,uuid) from public,anon;
 grant execute on function public.admin_assign_booking(uuid,uuid) to authenticated;
+
+-- Enable live updates for employee/admin dashboards where Supabase Realtime is available.
+do $$
+begin
+ if exists(select 1 from pg_publication where pubname='supabase_realtime')
+    and not exists(select 1 from pg_publication_tables where pubname='supabase_realtime' and schemaname='public' and tablename='bookings') then
+  execute 'alter publication supabase_realtime add table public.bookings';
+ end if;
+end $$;

@@ -2050,3 +2050,7 @@ button:not(:disabled):active,
 .staff-reschedule-form .account-submit{grid-column:1/-1;justify-content:center;min-height:38px}
 .staff-reschedule-form small{grid-column:1/-1;color:#899496;font-size:9px;line-height:1.6}
 @media(max-width:700px){.staff-reschedule-form{grid-template-columns:1fr}}
+
+.staff-refresh-button{display:inline-flex;align-items:center;gap:7px;min-height:34px;padding:0 11px;border:1px solid rgba(255,255,255,.12);border-radius:7px;color:#b8c0c0;background:rgba(255,255,255,.035);font:inherit;font-size:10px;font-weight:700;cursor:pointer;transition:color .2s,border-color .2s,background .2s}
+.staff-refresh-button:hover{border-color:rgba(212,0,0,.5);color:#fff;background:rgba(212,0,0,.08)}
+.staff-refresh-button:disabled{opacity:.5;cursor:wait}
