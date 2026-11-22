@@ -78,7 +78,7 @@ button, a { -webkit-tap-highlight-color: transparent; }
 .about-section { display:grid; grid-template-columns:1fr 1fr; min-height:610px; background:#191d20; border-block:1px solid var(--line); }
 .about-photo { position:relative; min-height:550px; overflow:hidden; }
 .about-photo > img { width:100%; height:100%; position:absolute; inset:0; object-fit:cover; filter:brightness(.55) saturate(.7); }
-.photo-stamp { position:absolute; left:10%; bottom:10%; display:flex; flex-direction:column; padding:22px 26px; border:1px solid #ffffff45; background:#1113159c; backdrop-filter:blur(12px); }
+.photo-stamp { position:absolute; left:10%; bottom:10%; display:flex; flex-direction:column; padding:22px 26px; border:1px solid #ffffff45; background:#1113159c;  }
 .photo-stamp span { font-size:34px; font-weight:800; letter-spacing:-.1em; }
 .photo-stamp small { margin-top:4px; color:#c1c1bd; font-size:8px; letter-spacing:.2em; }
 .about-copy { align-self:center; max-width:600px; padding:80px clamp(40px,7vw,110px); }
@@ -208,7 +208,7 @@ main.min-h-screen::before {
   margin-bottom: 58px;
   padding: 28px 32px 30px;
   border: 1px solid rgba(240,238,232,.12);
-  border-left: 2px solid var(--rosso);
+  border-left: 0;
   border-radius: 3px 14px 14px 3px;
   background: linear-gradient(115deg, rgba(31,35,38,.82), rgba(20,23,25,.58));
   box-shadow: 0 18px 50px rgba(0,0,0,.13);
@@ -271,7 +271,7 @@ main.min-h-screen::before {
   border: 1px solid rgba(255,255,255,.2);
   border-radius: 7px;
   background: rgba(12,14,16,.68);
-  backdrop-filter: blur(10px);
+  
   font-size: 12px;
 }
 .gallery-note {
@@ -1007,8 +1007,8 @@ main.min-h-screen::before {
   width: 100%;
   border-bottom: 1px solid rgba(255,255,255,.08);
   background: rgba(17,19,21,.76);
-  backdrop-filter: blur(18px);
-  -webkit-backdrop-filter: blur(18px);
+  
+  -webkit-
   transform: translateY(0);
   opacity: 1;
   transition: transform .32s cubic-bezier(.2,.7,.2,1), opacity .25s ease;
@@ -1083,8 +1083,8 @@ html { scroll-padding-top: 92px; }
   opacity: 1;
   border-bottom: 1px solid rgba(255,255,255,.08);
   background: rgba(17,19,21,.84);
-  backdrop-filter: blur(18px);
-  -webkit-backdrop-filter: blur(18px);
+  
+  -webkit-
 }
 .site-header.is-hidden, .site-header.is-visible {
   transform: none;
@@ -1372,7 +1372,7 @@ html { scroll-padding-top: 92px; }
   top: -28rem;
   right: -18rem;
   border-radius: 50%;
-  background: radial-gradient(circle,rgba(212,0,0,.105),transparent 68%);
+  background: none;
 }
 .account-back {
   min-height: 38px;
@@ -1453,8 +1453,8 @@ html { scroll-padding-top: 92px; }
 .account-topbar {
   position: relative;
   z-index: 2;
-  backdrop-filter: blur(18px);
-  -webkit-backdrop-filter: blur(18px);
+  
+  -webkit-
   border-bottom-color: rgba(255,255,255,.1);
 }
 .account-brand { transition: opacity .2s; }
@@ -1580,7 +1580,7 @@ html { scroll-padding-top: 92px; }
 }
 .price-calculator-heading { max-width:620px; }
 .price-calculator-heading h3 { margin:16px 0 10px; font-size:clamp(25px,3vw,36px); line-height:1.1; letter-spacing:-.055em; }
-.price-calculator-heading h3 em { color:#aeb4b5; font-family:Georgia,serif; font-weight:400; }
+.price-calculator-heading h3 em { color:#aeb4b5; font-family:inherit; font-style:normal; font-weight:700; }
 .price-calculator-heading p { color:#aab1b2; font-size:12px; line-height:1.8; }
 .price-calculator-controls { display:grid; grid-template-columns:repeat(3,minmax(0,1fr)); gap:14px; margin-top:28px; }
 .price-calculator-controls label { display:grid; gap:9px; color:#cbd0cd; font-size:10px; font-weight:800; letter-spacing:.08em; text-transform:uppercase; }
@@ -1987,7 +1987,7 @@ button:not(:disabled):active,
 /* Booking entry point and staff operations */
 .booking-entry-card{display:flex;flex-direction:column;align-items:flex-start;justify-content:center;gap:18px}
 .booking-entry-card h3{margin:0;font-size:clamp(28px,3.5vw,42px);line-height:1.08;letter-spacing:-.055em}
-.booking-entry-card h3 em{color:#aeb4b5;font-family:Georgia,serif;font-weight:400}
+.booking-entry-card h3 em{color:#aeb4b5;font-family:inherit;font-style:normal;font-weight:700}
 .booking-entry-card>p{max-width:520px;color:#aab1b2;font-size:12px;line-height:1.85}
 .booking-entry-points{display:grid;gap:12px;margin:2px 0 4px;color:#cbd0cd;font-size:11px}
 .booking-entry-points span{display:flex;align-items:center;gap:10px}
