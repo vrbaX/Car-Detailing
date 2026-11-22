@@ -10,7 +10,7 @@ export default function Navbar() {
   return (
     <header className="site-header">
       <nav className="mx-auto flex h-[82px] max-w-[1440px] items-center justify-between px-12 max-[700px]:h-[70px] max-[700px]:px-5" aria-label="Hlavní navigace">
-        <a href="#top" aria-label="VRB DETAILING — úvodní stránka" className="flex items-center gap-3">
+        <a href="#top" aria-label="AG DETAILING — úvodní stránka" className="flex items-center gap-3">
           <span className="text-[31px] font-extrabold tracking-[-0.09em]">VRB<span className="text-[#D40000]">.</span></span>
           <span className="h-7 w-px bg-white/20" />
           <span className="text-[9px] font-bold tracking-[0.24em] text-white/65">DETAILING</span>
