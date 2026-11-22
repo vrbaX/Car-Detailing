@@ -1008,7 +1008,6 @@ main.min-h-screen::before {
   border-bottom: 1px solid rgba(255,255,255,.08);
   background: rgba(17,19,21,.76);
   
-  -webkit-
   transform: translateY(0);
   opacity: 1;
   transition: transform .32s cubic-bezier(.2,.7,.2,1), opacity .25s ease;
@@ -1084,7 +1083,6 @@ html { scroll-padding-top: 92px; }
   border-bottom: 1px solid rgba(255,255,255,.08);
   background: rgba(17,19,21,.84);
   
-  -webkit-
 }
 .site-header.is-hidden, .site-header.is-visible {
   transform: none;
@@ -1454,7 +1452,6 @@ html { scroll-padding-top: 92px; }
   position: relative;
   z-index: 2;
   
-  -webkit-
   border-bottom-color: rgba(255,255,255,.1);
 }
 .account-brand { transition: opacity .2s; }
