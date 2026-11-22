@@ -327,7 +327,7 @@ export default function AccountPage() {
     <main className="account-shell">
       <a className="account-back" href="/"><ArrowLeft size={16} /> Zpět na web</a>
       <section className="account-card">
-        <span className="account-mark">VRB<span>.</span></span>
+        <span className="account-mark">AG<span>.</span></span>
         <h1>Přístup k účtu není nastaven</h1>
         <p>Chybí připojení k databázi. Přihlašování se aktivuje po nastavení proměnných projektu.</p>
       </section>
@@ -342,7 +342,7 @@ export default function AccountPage() {
       <div className="account-auth-layout">
         <section className="account-intro">
           <span className="account-kicker"><i /> ZÁKAZNICKÁ ZÓNA</span>
-          <span className="account-mark">VRB<span>.</span></span>
+          <span className="account-mark">AG<span>.</span></span>
           <h1>Péče o vůz.<br /><em>Pod kontrolou.</em></h1>
           <p>Na jednom místě najdete termíny, informace o svém voze a průběh práce.</p>
           <div className="account-feature"><ShieldCheck size={18} /> Soukromý přístup k vašim zakázkám</div>
@@ -377,7 +377,7 @@ export default function AccountPage() {
   return (
     <main className="account-dashboard">
       <header className="account-topbar">
-        <a href="/" className="account-brand">VRB<span>.</span><small>DETAILING</small></a>
+        <a href="/" className="account-brand">AG<span>.</span><small>DETAILING</small></a>
         <div className="account-top-actions">
           <span><UserRound size={15} /> {profile?.full_name || session.user.email}</span>
           <button onClick={signOut}><LogOut size={15} /> Odhlásit</button>
