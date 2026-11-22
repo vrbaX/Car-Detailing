@@ -244,10 +244,10 @@ function LandingPage() {
       </section>
 
       <footer className="site-footer motion-section">
-        <a href="#" className="footer-brand">VRB<span>.</span><small>DETAILING</small></a>
+        <a href="#" className="footer-brand">AG<span>.</span><small>DETAILING</small></a>
         <p>Detailing a ochrana automobilů / Stříbro</p>
         <a href="#top" className="footer-top">Zpět nahoru <ArrowUpRight size={14} /></a>
-        <small className="copyright">© {new Date().getFullYear()} VRB DETAILING. Všechna práva vyhrazena.</small>
+        <small className="copyright">© {new Date().getFullYear()} AG DETAILING. Všechna práva vyhrazena.</small>
       </footer>
     </main>
   )
