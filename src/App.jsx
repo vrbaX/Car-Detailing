@@ -153,7 +153,7 @@ function LandingPage() {
           {services.map(({ number, icon: Icon, title, description, tags }) => (
             <article className="service-card reveal" key={number}>
               <div className="service-card-top">
-                <span className="service-index">{number}<i />04</span>
+                <span className="service-index">{number}</span>
                 <span className="service-icon"><Icon size={25} strokeWidth={1.35} /></span>
               </div>
               <span className="service-watermark" aria-hidden="true">{number}</span>
