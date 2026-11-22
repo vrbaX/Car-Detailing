@@ -168,7 +168,7 @@ button, a { -webkit-tap-highlight-color: transparent; }
 @keyframes scroll-pulse { 0%,100% { transform:translateY(0); opacity:.55; } 50% { transform:translateY(5px); opacity:1; } }
 
 
-/* --- VRB DETAILING: editorial studio refinement --- */
+/* --- AG DETAILING: editorial studio refinement --- */
 :root {
   --carbon: #101214;
   --carbon-2: #171a1d;
@@ -1737,7 +1737,7 @@ html { scroll-padding-top: 92px; }
 
 
 /* ------------------------------------------------------------------
-   VRB interaction system
+   AG interaction system
    One consistent motion language: primary / secondary / quiet actions.
    Keep hover feedback subtle and disable it for reduced-motion users.
 ------------------------------------------------------------------- */
@@ -2063,3 +2063,141 @@ button:not(:disabled):active,
 .staff-date-change small{color:#aeb7b7;font-size:10px;line-height:1.55}
 .staff-reschedule-progress{color:#e2c18c!important}
 .staff-reschedule-success{color:#9ed5ad!important}
+
+
+/* AG Detailing visual quality pass: solid surfaces, restrained geometry, no glass effects. */
+:root {
+  --radius-surface: 6px;
+  --radius-control: 6px;
+}
+
+/* Section headings should read as typography, not nested callout cards. */
+.section-heading {
+  padding: 0;
+  border: 0;
+  border-radius: 0;
+  background: transparent;
+  box-shadow: none;
+}
+
+/* Keep the real automotive photograph as the hero's visual anchor. */
+.hero-backdrop {
+  background:
+    linear-gradient(90deg, rgba(8,10,11,.82) 0%, rgba(8,10,11,.58) 48%, rgba(8,10,11,.7) 100%),
+    linear-gradient(0deg, rgba(8,10,11,.62), rgba(8,10,11,.1) 58%, rgba(8,10,11,.38));
+}
+.hero-backdrop::before { opacity: .06; }
+
+/* Solid navigation and image labels; no frosted-glass treatment. */
+.site-header,
+.account-topbar {
+  background: #111315 !important;
+  backdrop-filter: none !important;
+  -webkit-backdrop-filter: none !important;
+}
+.photo-stamp,
+.image-caption {
+  background: #111315;
+  backdrop-filter: none !important;
+  -webkit-backdrop-filter: none !important;
+}
+
+/* Remove the decorative red orb from account screens. */
+.account-shell::before,
+.account-dashboard::before { display: none !important; }
+
+/* One compact corner radius for actual surfaces and controls. */
+.service-card,
+.work-image,
+.step-row,
+.about-copy,
+.faq-item,
+.consult-form,
+.price-calculator,
+.account-card,
+.account-section,
+.account-vehicle,
+.customer-booking,
+.staff-booking,
+.staff-search-section,
+.staff-metrics-grid article,
+.staff-team-row,
+.staff-reschedule-form {
+  border-radius: var(--radius-surface) !important;
+  box-shadow: none;
+}
+.button-primary,
+.button-secondary,
+.button-nav,
+.account-submit,
+.account-outline-button,
+.account-back,
+.consult-form input,
+.consult-form select,
+.consult-form textarea,
+.account-form input,
+.account-inline-form input,
+.account-inline-form select,
+.account-booking-form input,
+.account-booking-form select,
+.account-booking-form textarea,
+.staff-booking-controls select,
+.staff-reschedule-form input,
+.price-calculator-controls select {
+  border-radius: var(--radius-control) !important;
+}
+
+/* Solid card fills instead of translucent layered surfaces. */
+.service-card,
+.service-card:hover { background: #1b1f22; }
+.step-row,
+.faq-item { background: #191d20; }
+.about-copy,
+.consult-form,
+.price-calculator,
+.account-card { background: #1b1f22; }
+.account-section,
+.staff-booking { background: #171a1d; }
+.account-vehicle,
+.customer-booking,
+.staff-search-section,
+.staff-metrics-grid article,
+.staff-team-row { background: #15191b; }
+
+/* Non-interactive cards do not jump when the pointer passes over them. */
+.service-card:hover,
+.step-row:hover,
+.account-vehicle:hover,
+.customer-booking:hover,
+.staff-booking:hover {
+  transform: none !important;
+  box-shadow: none !important;
+}
+
+/* Keep emphasis in the same sans-serif family as the rest of the site. */
+.section-heading h2 em,
+.about-copy h2 em,
+.contact-copy h2 em,
+.price-calculator-heading h3 em,
+.booking-entry-card h3 em,
+.account-intro h1 em,
+.account-welcome h1 em {
+  font-family: inherit !important;
+  font-style: normal !important;
+}
+
+/* Small, solid accents instead of gradient strokes and glow effects. */
+.price-calculator::before,
+.account-card::before { background: var(--rosso); }
+.booking-progress-fill { background: var(--rosso); box-shadow: none; }
+.booking-progress-step.is-current .booking-progress-node { box-shadow: none; }
+.booking-status-dot { box-shadow: none; }
+.booking-status-dot.is-complete { box-shadow: none; }
+
+@media (prefers-reduced-motion: no-preference) {
+  .service-card,
+  .step-row,
+  .account-vehicle,
+  .customer-booking,
+  .staff-booking { transition: border-color var(--motion-standard), background-color var(--motion-standard); }
+}
