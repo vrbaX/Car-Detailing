@@ -2197,3 +2197,20 @@ button:not(:disabled):active,
   .customer-booking,
   .staff-booking { transition: border-color var(--motion-standard), background-color var(--motion-standard); }
 }
+
+
+/* Extend the same restrained radius to labels and utility controls. */
+.tag-list span,
+.staff-status,
+.staff-reschedule-toggle,
+.staff-refresh-button,
+.staff-search-control,
+.staff-search-tabs button,
+.staff-admin-label,
+.account-alert,
+.account-loading,
+.staff-job-locked,
+.booking-exception,
+.price-calculator-result {
+  border-radius: 6px !important;
+}
