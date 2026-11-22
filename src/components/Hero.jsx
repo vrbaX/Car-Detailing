@@ -11,7 +11,7 @@ export default function Hero() {
         fetchPriority="high"
       />
       <div aria-hidden="true" className="hero-backdrop" />
-      <div aria-hidden="true" className="hero-mark">VRB<span>.</span></div>
+      <div aria-hidden="true" className="hero-mark">AG<span>.</span></div>
       <div className="hero-content">
         <div className="hero-copy">
           <div className="animate-fade-up mb-8 flex items-center gap-3 max-[700px]:mb-6">
